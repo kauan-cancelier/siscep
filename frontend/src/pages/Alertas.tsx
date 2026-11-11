@@ -20,7 +20,7 @@ export default function Alertas() {
               <SituacaoBadge situacao={a.situacao} />
             </div>
             <p className="text-sm text-slate-600">{a.pastilhaDescricao}</p>
-            <p className="mt-2 text-sm">Saldo <strong>{a.saldo}</strong> / minimo {a.estoqueMinimo}</p>
+            <p className="mt-2 text-sm">Saldo <strong>{a.saldo}</strong> / mínimo {a.estoqueMinimo}</p>
             <p className="text-xs text-slate-500">Desde {dataHora(a.geradoEm)}</p>
           </li>
         ))}

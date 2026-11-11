@@ -2,7 +2,7 @@ import { useState, type FormEvent } from 'react';
 import { Plus, Upload } from 'lucide-react';
 import { api } from '../api/cliente';
 import type { Fabricante, Fornecedor, HistoricoMinimo, ImportacaoResultado, Pagina, Pastilha } from '../api/tipos';
-import { Campo, Carregando, Mensagem, Modal, Paginacao, SituacaoBadge, StatusBadge, Titulo, Vazio } from '../components/Ui';
+import { Campo, Carregando, Confirmar, Mensagem, Modal, Paginacao, SituacaoBadge, StatusBadge, Titulo, Vazio } from '../components/Ui';
 import { dataHora } from '../utils/formato';
 import { mensagemErro, useCarregar } from '../utils/useCarregar';
 
@@ -23,6 +23,8 @@ export default function Pastilhas() {
   const [erroForm, setErroForm] = useState<string | null>(null);
   const [aviso, setAviso] = useState<string | null>(null);
   const [historico, setHistorico] = useState<{ p: Pastilha; itens: HistoricoMinimo[] } | null>(null);
+  const [excluindo, setExcluindo] = useState<Pastilha | null>(null);
+  const [sucesso, setSucesso] = useState<string | null>(null);
   const [importacao, setImportacao] = useState<ImportacaoResultado | null>(null);
 
   function abrir(p: Pastilha | null) {
@@ -53,10 +55,12 @@ export default function Pastilhas() {
     }
   }
 
-  async function acao(fn: () => Promise<unknown>) {
+  async function acao(fn: () => Promise<unknown>, ok?: string) {
     setAviso(null);
+    setSucesso(null);
     try {
       await fn();
+      if (ok) setSucesso(ok);
       recarregar();
     } catch (err) {
       setAviso(mensagemErro(err));
@@ -96,12 +100,12 @@ export default function Pastilhas() {
       {importacao && (
         <div className="mb-3">
           <Mensagem tipo={importacao.erros.length ? 'aviso' : 'sucesso'}>
-            Importacao concluida: {importacao.pastilhasCriadas} pastilha(s) criada(s), {importacao.saldosIniciais} saldo(s) inicial(is) registrado(s).
+            Importação concluída: {importacao.pastilhasCriadas} pastilha(s) criada(s), {importacao.saldosIniciais} saldo(s) inicial(is) registrado(s).
             {importacao.erros.length > 0 && <ul className="mt-1 list-disc pl-4">{importacao.erros.slice(0, 10).map((e) => <li key={e}>{e}</li>)}</ul>}
           </Mensagem>
         </div>
       )}
-      {(erro || aviso) && <div className="mb-3"><Mensagem tipo="erro">{erro ?? aviso}</Mensagem></div>}
+      {(erro || aviso || sucesso) && <div className="mb-3"><Mensagem tipo={sucesso && !erro && !aviso ? 'sucesso' : 'erro'}>{erro ?? aviso ?? sucesso}</Mensagem></div>}
       <div className="mb-4 max-w-md">
         <label htmlFor="busca" className="sr-only">Buscar</label>
         <input id="busca" className="campo" placeholder="Buscar por código ou descrição" value={termo} onChange={(e) => { setTermo(e.target.value); setPagina(0); }} />
@@ -120,8 +124,8 @@ export default function Pastilhas() {
                     <td className="space-x-3 whitespace-nowrap text-right">
                       <button type="button" className="btn-link" onClick={() => abrir(p)}>Editar</button>
                       <button type="button" className="btn-link" onClick={() => api.get<HistoricoMinimo[]>(`/api/pastilhas/${p.id}/estoque-minimo/historico`).then((itens) => setHistorico({ p, itens }))}>Hist. mínimo</button>
-                      <button type="button" className="btn-link" onClick={() => acao(() => api.patch(`/api/pastilhas/${p.id}/status`, { ativo: !p.ativo }))}>{p.ativo ? 'Inativar' : 'Ativar'}</button>
-                      <button type="button" className="btn-link text-red-600" onClick={() => confirm(`Excluir ${p.codigo}?`) && acao(() => api.delete(`/api/pastilhas/${p.id}`))}>Excluir</button>
+                      <button type="button" className="btn-link" onClick={() => acao(() => api.patch(`/api/pastilhas/${p.id}/status`, { ativo: !p.ativo }), p.ativo ? `${p.codigo} inativada.` : `${p.codigo} ativada.`)}>{p.ativo ? 'Inativar' : 'Ativar'}</button>
+                      <button type="button" className="btn-link text-red-600" onClick={() => setExcluindo(p)}>Excluir</button>
                     </td>
                   </tr>
                 ))}
@@ -164,6 +168,15 @@ export default function Pastilhas() {
           </table>
         )}
       </Modal>
+
+      {excluindo && (
+        <Confirmar
+          titulo="Excluir pastilha"
+          texto={<>Excluir definitivamente <strong>{excluindo.codigo}</strong> — {excluindo.descricao}? Pastilhas com movimentações não podem ser excluídas; nesse caso, use Inativar.</>}
+          aoCancelar={() => setExcluindo(null)}
+          aoConfirmar={() => { const p = excluindo; setExcluindo(null); acao(() => api.delete(`/api/pastilhas/${p.id}`), `${p.codigo} excluída.`); }}
+        />
+      )}
     </>
   );
 }

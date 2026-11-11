@@ -24,8 +24,21 @@ public class JwtService {
     private final long expiracaoMinutos;
     private final Clock clock;
 
+    private static byte[] derivarChave(String secret) {
+        try {
+            return Decoders.BASE64.decode(secret);
+        } catch (Exception e) {
+            try {
+                return java.security.MessageDigest.getInstance("SHA-256")
+                        .digest(secret.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            } catch (java.security.NoSuchAlgorithmException ex) {
+                throw new IllegalStateException(ex);
+            }
+        }
+    }
+
     public JwtService(JwtProperties props, Clock clock) {
-        this.chave = Keys.hmacShaKeyFor(Decoders.BASE64.decode(props.secret()));
+        this.chave = Keys.hmacShaKeyFor(derivarChave(props.secret()));
         this.expiracaoMinutos = Math.min(props.expiracaoMinutos(), EXPIRACAO_MAXIMA_MINUTOS);
         this.clock = clock;
     }

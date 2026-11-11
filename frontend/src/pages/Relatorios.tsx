@@ -54,7 +54,7 @@ export default function Relatorios() {
       {aba === 'reposicao' && (
         <section className="cartao" role="tabpanel">
           <div className="flex flex-col gap-2 border-b border-slate-200 p-4 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-sm text-slate-600">Itens criticos e zerados. Quantidade sugerida = 2 x estoque minimo - saldo atual.</p>
+            <p className="text-sm text-slate-600">Itens críticos e zerados. Quantidade sugerida = 2 × estoque mínimo − saldo atual.</p>
             <BotoesExportar url="/api/relatorios/reposicao/exportar" params={{}} nome="reposicao" />
           </div>
           {reposicao.erro && <Mensagem tipo="erro">{reposicao.erro}</Mensagem>}

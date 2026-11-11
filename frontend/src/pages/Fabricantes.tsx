@@ -2,7 +2,7 @@ import { useState, type FormEvent } from 'react';
 import { Plus } from 'lucide-react';
 import { api } from '../api/cliente';
 import type { Fabricante } from '../api/tipos';
-import { Campo, Carregando, Mensagem, Modal, StatusBadge, Titulo, Vazio } from '../components/Ui';
+import { Campo, Carregando, Confirmar, Mensagem, Modal, StatusBadge, Titulo, Vazio } from '../components/Ui';
 import { mensagemErro, useCarregar } from '../utils/useCarregar';
 
 const VAZIO = { nome: '', pais: '', site: '' };
@@ -34,10 +34,15 @@ export default function Fabricantes() {
     }
   }
 
-  async function acao(fn: () => Promise<unknown>) {
+  const [excluindo, setExcluindo] = useState<Fabricante | null>(null);
+  const [sucesso, setSucesso] = useState<string | null>(null);
+
+  async function acao(fn: () => Promise<unknown>, ok?: string) {
     setAviso(null);
+    setSucesso(null);
     try {
       await fn();
+      if (ok) setSucesso(ok);
       recarregar();
     } catch (err) {
       setAviso(mensagemErro(err));
@@ -47,7 +52,7 @@ export default function Fabricantes() {
   return (
     <>
       <Titulo titulo="Fabricantes" acoes={<button type="button" className="btn-primario" onClick={() => abrir(null)}><Plus className="h-4 w-4" aria-hidden /> Novo fabricante</button>} />
-      {(erro || aviso) && <div className="mb-3"><Mensagem tipo="erro">{erro ?? aviso}</Mensagem></div>}
+      {(erro || aviso || sucesso) && <div className="mb-3"><Mensagem tipo={sucesso && !erro && !aviso ? 'sucesso' : 'erro'}>{erro ?? aviso ?? sucesso}</Mensagem></div>}
       <div className="cartao overflow-x-auto">
         {carregando ? <Carregando /> : dados?.length === 0 ? <Vazio texto="Nenhum fabricante cadastrado." /> : (
           <table className="tabela">
@@ -59,8 +64,8 @@ export default function Fabricantes() {
                   <td><StatusBadge ativo={f.ativo} /></td>
                   <td className="space-x-3 whitespace-nowrap text-right">
                     <button type="button" className="btn-link" onClick={() => abrir(f)}>Editar</button>
-                    <button type="button" className="btn-link" onClick={() => acao(() => api.patch(`/api/fabricantes/${f.id}/status`, { ativo: !f.ativo }))}>{f.ativo ? 'Inativar' : 'Ativar'}</button>
-                    <button type="button" className="btn-link text-red-600" onClick={() => confirm(`Excluir ${f.nome}?`) && acao(() => api.delete(`/api/fabricantes/${f.id}`))}>Excluir</button>
+                    <button type="button" className="btn-link" onClick={() => acao(() => api.patch(`/api/fabricantes/${f.id}/status`, { ativo: !f.ativo }), f.ativo ? `${f.nome} inativado.` : `${f.nome} ativado.`)}>{f.ativo ? 'Inativar' : 'Ativar'}</button>
+                    <button type="button" className="btn-link text-red-600" onClick={() => setExcluindo(f)}>Excluir</button>
                   </td>
                 </tr>
               ))}
@@ -77,6 +82,14 @@ export default function Fabricantes() {
           <div className="flex justify-end gap-2"><button type="button" className="btn-secundario" onClick={() => setAberto(false)}>Cancelar</button><button type="submit" className="btn-primario">Salvar</button></div>
         </form>
       </Modal>
+      {excluindo && (
+        <Confirmar
+          titulo="Excluir fabricante"
+          texto={<>Excluir definitivamente <strong>{excluindo.nome}</strong>? Se houver pastilhas vinculadas, prefira Inativar.</>}
+          aoCancelar={() => setExcluindo(null)}
+          aoConfirmar={() => { const f = excluindo; setExcluindo(null); acao(() => api.delete(`/api/fabricantes/${f.id}`), `${f.nome} excluído.`); }}
+        />
+      )}
     </>
   );
 }

@@ -66,8 +66,47 @@ export function Carregando({ texto = 'Carregando...' }: { texto?: string }) {
   );
 }
 
-export function Vazio({ texto }: { texto: string }) {
-  return <p className="py-8 text-center text-sm text-slate-500">{texto}</p>;
+export function Vazio({ texto, dica }: { texto: string; dica?: string }) {
+  return (
+    <div className="flex flex-col items-center gap-1 py-10 text-center">
+      <InboxIcon />
+      <p className="text-sm text-slate-500">{texto}</p>
+      {dica && <p className="text-xs text-slate-400">{dica}</p>}
+    </div>
+  );
+}
+
+function InboxIcon() {
+  return (
+    <svg aria-hidden className="h-8 w-8 text-slate-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <path d="M22 12h-6l-2 3h-4l-2-3H2" />
+      <path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" />
+    </svg>
+  );
+}
+
+export function Confirmar({
+  titulo,
+  texto,
+  confirmarRotulo = 'Excluir',
+  aoConfirmar,
+  aoCancelar,
+}: {
+  titulo: string;
+  texto: ReactNode;
+  confirmarRotulo?: string;
+  aoConfirmar: () => void;
+  aoCancelar: () => void;
+}) {
+  return (
+    <Modal aberto titulo={titulo} aoFechar={aoCancelar} largura="max-w-sm">
+      <p className="text-sm text-slate-600">{texto}</p>
+      <div className="mt-5 flex justify-end gap-2">
+        <button type="button" className="btn-secundario" onClick={aoCancelar}>Cancelar</button>
+        <button type="button" className="btn-perigo" onClick={aoConfirmar}>{confirmarRotulo}</button>
+      </div>
+    </Modal>
+  );
 }
 
 export function Campo({ rotulo, id, erro, children }: { rotulo: string; id: string; erro?: string; children: ReactNode }) {
@@ -141,7 +180,7 @@ export function Paginacao({
   return (
     <div className="flex flex-col items-center justify-between gap-2 border-t border-slate-200 px-3 py-2 text-sm text-slate-600 sm:flex-row">
       <span>
-        {totalElementos} registro(s) - pagina {totalPaginas === 0 ? 0 : pagina + 1} de {totalPaginas}
+        {totalElementos} registro(s) — página {totalPaginas === 0 ? 0 : pagina + 1} de {totalPaginas}
       </span>
       <div className="flex gap-2">
         <button type="button" className="btn-secundario" disabled={pagina <= 0} onClick={() => aoMudar(pagina - 1)}>
