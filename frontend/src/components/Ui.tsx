@@ -135,13 +135,15 @@ export function Modal({
   largura?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
+  const fecharRef = useRef(aoFechar);
+  fecharRef.current = aoFechar;
   useEffect(() => {
     if (!aberto) return;
-    const esc = (e: KeyboardEvent) => e.key === 'Escape' && aoFechar();
+    const esc = (e: KeyboardEvent) => e.key === 'Escape' && fecharRef.current();
     document.addEventListener('keydown', esc);
     ref.current?.querySelector<HTMLElement>('input,select,textarea,button')?.focus();
     return () => document.removeEventListener('keydown', esc);
-  }, [aberto, aoFechar]);
+  }, [aberto]);
   if (!aberto) return null;
   return (
     <div className="fixed inset-0 z-40 flex items-end justify-center bg-slate-900/40 p-0 sm:items-center sm:p-4">
