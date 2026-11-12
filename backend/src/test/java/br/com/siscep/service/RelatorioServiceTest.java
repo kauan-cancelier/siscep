@@ -66,6 +66,8 @@ class RelatorioServiceTest {
         f.setPrazoMedioEntregaDias(7);
         p.setFornecedorPrincipal(f);
         when(pastilhaRepository.listarParaReposicao()).thenReturn(List.of(p));
+        when(movimentacaoRepository.consumoPorPastilha(any(), any(), any()))
+                .thenReturn(List.of(new Consumo(1L, "P1", "Pastilha 1", 30L, 6L)));
 
         var r = service.reposicao().get(0);
 
@@ -74,5 +76,7 @@ class RelatorioServiceTest {
         assertThat(r.fornecedor()).isEqualTo("Fornecedor 2");
         assertThat(r.contatoFornecedor()).isEqualTo("Joao | 49 3333-0000");
         assertThat(r.prazoEntregaDias()).isEqualTo(7);
+        assertThat(r.consumoMedioDiario()).isEqualByComparingTo(new BigDecimal("1.00"));
+        assertThat(r.diasParaEsgotar()).isEqualTo(2);
     }
 }

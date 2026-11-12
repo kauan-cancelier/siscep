@@ -21,12 +21,14 @@ public class FornecedorService {
     private final FornecedorRepository fornecedorRepository;
     private final PastilhaRepository pastilhaRepository;
     private final MovimentacaoRepository movimentacaoRepository;
+    private final AuditoriaService auditoria;
 
     public FornecedorService(FornecedorRepository fornecedorRepository, PastilhaRepository pastilhaRepository,
-                             MovimentacaoRepository movimentacaoRepository) {
+                             MovimentacaoRepository movimentacaoRepository, AuditoriaService auditoria) {
         this.fornecedorRepository = fornecedorRepository;
         this.pastilhaRepository = pastilhaRepository;
         this.movimentacaoRepository = movimentacaoRepository;
+        this.auditoria = auditoria;
     }
 
     @Transactional(readOnly = true)
@@ -49,7 +51,9 @@ public class FornecedorService {
         }
         Fornecedor f = new Fornecedor(req.razaoSocial().trim(), cnpj);
         preencher(f, req);
-        return FornecedorResponse.de(fornecedorRepository.save(f));
+        Fornecedor salvo = fornecedorRepository.save(f);
+        auditoria.registrar("CRIAR", "fornecedor", salvo.getId(), "Fornecedor " + salvo.getRazaoSocial() + " criado.");
+        return FornecedorResponse.de(salvo);
     }
 
     @Transactional
@@ -62,6 +66,7 @@ public class FornecedorService {
         f.setRazaoSocial(req.razaoSocial().trim());
         f.setCnpj(cnpj);
         preencher(f, req);
+        auditoria.registrar("ATUALIZAR", "fornecedor", id, "Fornecedor " + f.getRazaoSocial() + " atualizado.");
         return FornecedorResponse.de(f);
     }
 
@@ -69,6 +74,7 @@ public class FornecedorService {
     public FornecedorResponse alterarStatus(Long id, boolean ativo) {
         Fornecedor f = obter(id);
         f.setAtivo(ativo);
+        auditoria.registrar(ativo ? "ATIVAR" : "INATIVAR", "fornecedor", id, "Fornecedor " + f.getRazaoSocial() + (ativo ? " ativado." : " inativado."));
         return FornecedorResponse.de(f);
     }
 
@@ -80,6 +86,7 @@ public class FornecedorService {
                     "O fornecedor possui pastilhas ou movimentações vinculadas e não pode ser excluido; inative-o.");
         }
         fornecedorRepository.delete(f);
+        auditoria.registrar("EXCLUIR", "fornecedor", id, "Fornecedor " + f.getRazaoSocial() + " excluído.");
     }
 
     Fornecedor obter(Long id) {

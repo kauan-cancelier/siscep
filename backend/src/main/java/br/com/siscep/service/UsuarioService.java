@@ -27,13 +27,15 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final RegistroAcessoRepository registroAcessoRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuditoriaService auditoria;
     private final Clock clock;
 
     public UsuarioService(UsuarioRepository usuarioRepository, RegistroAcessoRepository registroAcessoRepository,
-                          PasswordEncoder passwordEncoder, Clock clock) {
+                          PasswordEncoder passwordEncoder, AuditoriaService auditoria, Clock clock) {
         this.usuarioRepository = usuarioRepository;
         this.registroAcessoRepository = registroAcessoRepository;
         this.passwordEncoder = passwordEncoder;
+        this.auditoria = auditoria;
         this.clock = clock;
     }
 
@@ -58,7 +60,9 @@ public class UsuarioService {
             throw new ConflitoException("Já existe um usuário com o e-mail " + email + ".");
         }
         Usuario u = new Usuario(req.nome().trim(), email, passwordEncoder.encode(req.senha()), req.perfil());
-        return UsuarioResponse.de(usuarioRepository.save(u), LocalDateTime.now(clock));
+        Usuario salvo = usuarioRepository.save(u);
+        auditoria.registrar("CRIAR", "usuario", salvo.getId(), "Usuário " + salvo.getNome() + " (" + salvo.getPerfil() + ") criado.");
+        return UsuarioResponse.de(salvo, LocalDateTime.now(clock));
     }
 
     @Transactional
@@ -74,6 +78,7 @@ public class UsuarioService {
         u.setNome(req.nome().trim());
         u.setEmail(email);
         u.setPerfil(req.perfil());
+        auditoria.registrar("ATUALIZAR", "usuario", id, "Usuário " + u.getNome() + " atualizado.");
         return UsuarioResponse.de(u, LocalDateTime.now(clock));
     }
 
@@ -84,6 +89,7 @@ public class UsuarioService {
         }
         Usuario u = obter(id);
         u.setAtivo(ativo);
+        auditoria.registrar(ativo ? "ATIVAR" : "INATIVAR", "usuario", id, "Usuário " + u.getNome() + (ativo ? " ativado." : " inativado."));
         return UsuarioResponse.de(u, LocalDateTime.now(clock));
     }
 
@@ -92,12 +98,14 @@ public class UsuarioService {
         Usuario u = obter(id);
         u.setSenhaHash(passwordEncoder.encode(novaSenha));
         u.desbloquear();
+        auditoria.registrar("REDEFINIR_SENHA", "usuario", id, "Senha de " + u.getNome() + " redefinida.");
     }
 
     @Transactional
     public UsuarioResponse desbloquear(Long id) {
         Usuario u = obter(id);
         u.desbloquear();
+        auditoria.registrar("DESBLOQUEAR", "usuario", id, "Usuário " + u.getNome() + " desbloqueado.");
         return UsuarioResponse.de(u, LocalDateTime.now(clock));
     }
 

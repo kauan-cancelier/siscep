@@ -41,13 +41,14 @@ public class PastilhaService {
     private final FabricanteService fabricanteService;
     private final FornecedorService fornecedorService;
     private final AlertaService alertaService;
+    private final AuditoriaService auditoria;
     private final Clock clock;
 
     public PastilhaService(PastilhaRepository pastilhaRepository, MovimentacaoRepository movimentacaoRepository,
                            HistoricoEstoqueMinimoRepository historicoMinimoRepository,
                            PastilhaFornecedorRepository pastilhaFornecedorRepository,
                            FabricanteService fabricanteService, FornecedorService fornecedorService,
-                           AlertaService alertaService, Clock clock) {
+                           AlertaService alertaService, AuditoriaService auditoria, Clock clock) {
         this.pastilhaRepository = pastilhaRepository;
         this.movimentacaoRepository = movimentacaoRepository;
         this.historicoMinimoRepository = historicoMinimoRepository;
@@ -55,6 +56,7 @@ public class PastilhaService {
         this.fabricanteService = fabricanteService;
         this.fornecedorService = fornecedorService;
         this.alertaService = alertaService;
+        this.auditoria = auditoria;
         this.clock = clock;
     }
 
@@ -82,6 +84,7 @@ public class PastilhaService {
         preencher(p, req);
         Pastilha salva = pastilhaRepository.save(p);
         alertaService.avaliar(salva);
+        auditoria.registrar(usuario, "CRIAR", "pastilha", salva.getId(), "Pastilha " + salva.getCodigo() + " criada.");
         return PastilhaResponse.de(salva);
     }
 
@@ -102,6 +105,7 @@ public class PastilhaService {
         p.setDescricao(req.descricao().trim());
         preencher(p, req);
         alterarMinimo(p, req.estoqueMinimo(), usuario);
+        auditoria.registrar(usuario, "ATUALIZAR", "pastilha", p.getId(), "Pastilha " + p.getCodigo() + " atualizada.");
         return PastilhaResponse.de(p);
     }
 
@@ -117,6 +121,8 @@ public class PastilhaService {
         Pastilha p = obter(id);
         p.setAtivo(ativo);
         alertaService.avaliar(p);
+        auditoria.registrar(ativo ? "ATIVAR" : "INATIVAR", "pastilha", p.getId(),
+                "Pastilha " + p.getCodigo() + (ativo ? " ativada." : " inativada."));
         return PastilhaResponse.de(p);
     }
 
@@ -129,6 +135,7 @@ public class PastilhaService {
         }
         pastilhaFornecedorRepository.deleteAll(pastilhaFornecedorRepository.findByPastilhaId(id));
         pastilhaRepository.delete(p);
+        auditoria.registrar("EXCLUIR", "pastilha", id, "Pastilha " + p.getCodigo() + " excluída.");
     }
 
     @Transactional(readOnly = true)

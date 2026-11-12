@@ -3,6 +3,7 @@ import { AuthProvider } from './auth/AuthContext';
 import Layout from './components/Layout';
 import { ComPermissao, RedirecionaInicio, RotaPrivada } from './components/Rotas';
 import Alertas from './pages/Alertas';
+import Auditoria from './pages/Auditoria';
 import Dashboard from './pages/Dashboard';
 import Estoque from './pages/Estoque';
 import Fabricantes from './pages/Fabricantes';
@@ -32,6 +33,7 @@ export function Rotas() {
         <Route path="fabricantes" element={<ComPermissao permissao="cadastros"><Fabricantes /></ComPermissao>} />
         <Route path="fornecedores" element={<ComPermissao permissao="cadastros"><Fornecedores /></ComPermissao>} />
         <Route path="usuarios" element={<ComPermissao permissao="usuarios"><Usuarios /></ComPermissao>} />
+        <Route path="auditoria" element={<ComPermissao permissao="auditoria"><Auditoria /></ComPermissao>} />
         <Route path="relatorios" element={<ComPermissao permissao="relatorios"><Relatorios /></ComPermissao>} />
         <Route path="minha-senha" element={<MinhaSenha />} />
       </Route>

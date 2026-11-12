@@ -14,6 +14,7 @@ import {
   LayoutDashboard,
   LogOut,
   Menu,
+  ScrollText,
   SlidersHorizontal,
   Truck,
   Users,
@@ -55,6 +56,7 @@ const MENU: { grupo: string; itens: Item[] }[] = [
       { para: '/fabricantes', rotulo: 'Fabricantes', icone: Factory, permissao: 'cadastros' },
       { para: '/fornecedores', rotulo: 'Fornecedores', icone: Truck, permissao: 'cadastros' },
       { para: '/usuarios', rotulo: 'Usuários', icone: Users, permissao: 'usuarios' },
+      { para: '/auditoria', rotulo: 'Auditoria', icone: ScrollText, permissao: 'auditoria' },
     ],
   },
   {

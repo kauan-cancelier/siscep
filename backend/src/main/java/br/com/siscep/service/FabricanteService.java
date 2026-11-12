@@ -19,10 +19,13 @@ public class FabricanteService {
 
     private final FabricanteRepository fabricanteRepository;
     private final PastilhaRepository pastilhaRepository;
+    private final AuditoriaService auditoria;
 
-    public FabricanteService(FabricanteRepository fabricanteRepository, PastilhaRepository pastilhaRepository) {
+    public FabricanteService(FabricanteRepository fabricanteRepository, PastilhaRepository pastilhaRepository,
+                             AuditoriaService auditoria) {
         this.fabricanteRepository = fabricanteRepository;
         this.pastilhaRepository = pastilhaRepository;
+        this.auditoria = auditoria;
     }
 
     @Transactional(readOnly = true)
@@ -43,7 +46,9 @@ public class FabricanteService {
         if (fabricanteRepository.existsByNomeIgnoreCase(nome)) {
             throw new ConflitoException("Já existe um fabricante com o nome " + nome + ".");
         }
-        return FabricanteResponse.de(fabricanteRepository.save(new Fabricante(nome, req.pais(), req.site())));
+        Fabricante salvo = fabricanteRepository.save(new Fabricante(nome, req.pais(), req.site()));
+        auditoria.registrar("CRIAR", "fabricante", salvo.getId(), "Fabricante " + nome + " criado.");
+        return FabricanteResponse.de(salvo);
     }
 
     @Transactional
@@ -56,6 +61,7 @@ public class FabricanteService {
         f.setNome(nome);
         f.setPais(req.pais());
         f.setSite(req.site());
+        auditoria.registrar("ATUALIZAR", "fabricante", id, "Fabricante " + nome + " atualizado.");
         return FabricanteResponse.de(f);
     }
 
@@ -63,6 +69,7 @@ public class FabricanteService {
     public FabricanteResponse alterarStatus(Long id, boolean ativo) {
         Fabricante f = obter(id);
         f.setAtivo(ativo);
+        auditoria.registrar(ativo ? "ATIVAR" : "INATIVAR", "fabricante", id, "Fabricante " + f.getNome() + (ativo ? " ativado." : " inativado."));
         return FabricanteResponse.de(f);
     }
 
@@ -74,6 +81,7 @@ public class FabricanteService {
                     "O fabricante possui pastilhas vinculadas e não pode ser excluido; inative-o.");
         }
         fabricanteRepository.delete(f);
+        auditoria.registrar("EXCLUIR", "fabricante", id, "Fabricante " + f.getNome() + " excluído.");
     }
 
     Fabricante obter(Long id) {

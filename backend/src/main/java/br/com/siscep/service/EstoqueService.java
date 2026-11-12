@@ -35,14 +35,16 @@ public class EstoqueService {
     private final MovimentacaoRepository movimentacaoRepository;
     private final FornecedorService fornecedorService;
     private final AlertaService alertaService;
+    private final AuditoriaService auditoria;
     private final Clock clock;
 
     public EstoqueService(PastilhaRepository pastilhaRepository, MovimentacaoRepository movimentacaoRepository,
-                          FornecedorService fornecedorService, AlertaService alertaService, Clock clock) {
+                          FornecedorService fornecedorService, AlertaService alertaService, AuditoriaService auditoria, Clock clock) {
         this.pastilhaRepository = pastilhaRepository;
         this.movimentacaoRepository = movimentacaoRepository;
         this.fornecedorService = fornecedorService;
         this.alertaService = alertaService;
+        this.auditoria = auditoria;
         this.clock = clock;
     }
 
@@ -128,6 +130,9 @@ public class EstoqueService {
         Movimentacao salva = movimentacaoRepository.save(m);
         pastilhaRepository.saveAndFlush(p);
         alertaService.avaliar(p);
+        auditoria.registrar(usuario, "MOVIMENTACAO_" + salva.getTipo().name(), "movimentacao", salva.getId(),
+                p.getCodigo() + ": " + salva.getTipo().name().toLowerCase() + " de " + salva.getQuantidade()
+                        + " (saldo " + anterior + " -> " + p.getSaldoAtual() + ")");
         return MovimentacaoResponse.de(salva);
     }
 

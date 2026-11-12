@@ -11,7 +11,8 @@ export type Permissao =
   | 'estoque'
   | 'historico'
   | 'dashboard'
-  | 'relatorios';
+  | 'relatorios'
+  | 'auditoria';
 
 const MATRIZ: Record<Permissao, Perfil[]> = {
   usuarios: ['ADMINISTRADOR'],
@@ -24,6 +25,7 @@ const MATRIZ: Record<Permissao, Perfil[]> = {
   historico: ['ADMINISTRADOR', 'ALMOXARIFE', 'OPERADOR', 'GESTOR'],
   dashboard: ['ADMINISTRADOR', 'ALMOXARIFE', 'GESTOR'],
   relatorios: ['ADMINISTRADOR', 'ALMOXARIFE', 'GESTOR'],
+  auditoria: ['ADMINISTRADOR'],
 };
 
 export function pode(perfil: Perfil | undefined, permissao: Permissao): boolean {

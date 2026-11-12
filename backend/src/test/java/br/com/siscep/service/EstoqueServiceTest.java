@@ -46,6 +46,8 @@ class EstoqueServiceTest {
     private FornecedorService fornecedorService;
     @Mock
     private AlertaService alertaService;
+    @Mock
+    private AuditoriaService auditoriaService;
 
     private EstoqueService service;
     private final Usuario almoxarife = Fixtures.usuario(1, PerfilUsuario.ALMOXARIFE);
@@ -53,7 +55,7 @@ class EstoqueServiceTest {
     @BeforeEach
     void setUp() {
         service = new EstoqueService(pastilhaRepository, movimentacaoRepository, fornecedorService, alertaService,
-                Fixtures.CLOCK);
+                auditoriaService, Fixtures.CLOCK);
     }
 
     private Pastilha comPastilha(int saldo, int minimo) {

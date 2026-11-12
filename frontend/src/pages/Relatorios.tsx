@@ -61,13 +61,15 @@ export default function Relatorios() {
           {reposicao.carregando ? <Carregando /> : reposicao.dados?.length === 0 ? <Vazio texto="Nenhum item precisa de reposição." /> : (
             <div className="overflow-x-auto">
               <table className="tabela">
-                <thead><tr><th>Código</th><th>Descrição</th><th>Situação</th><th className="text-right">Saldo</th><th className="text-right">Mínimo</th><th className="text-right">Sugerido</th><th>Fornecedor</th><th className="hidden lg:table-cell">Contato</th><th className="text-right">Prazo</th></tr></thead>
+                <thead><tr><th>Código</th><th>Descrição</th><th>Situação</th><th className="text-right">Saldo</th><th className="text-right">Mínimo</th><th className="text-right">Sugerido</th><th className="text-right">Consumo/dia</th><th className="text-right">Esgota em</th><th>Fornecedor</th><th className="hidden lg:table-cell">Contato</th><th className="text-right">Prazo</th></tr></thead>
                 <tbody className="divide-y divide-slate-100">
                   {reposicao.dados?.map((r) => (
                     <tr key={r.pastilhaId}>
                       <td className="font-medium">{r.codigo}</td><td>{r.descricao}</td><td><SituacaoBadge situacao={r.situacao} /></td>
                       <td className="text-right">{r.saldoAtual}</td><td className="text-right">{r.estoqueMinimo}</td>
                       <td className="text-right font-semibold text-marca-700">{r.quantidadeSugerida}</td>
+                      <td className="text-right">{Number(r.consumoMedioDiario).toLocaleString('pt-BR')}</td>
+                      <td className="text-right">{r.diasParaEsgotar != null ? `${r.diasParaEsgotar} d` : '-'}</td>
                       <td>{r.fornecedor ?? '-'}</td><td className="hidden text-xs lg:table-cell">{r.contatoFornecedor ?? '-'}</td>
                       <td className="text-right">{r.prazoEntregaDias != null ? `${r.prazoEntregaDias} d` : '-'}</td>
                     </tr>

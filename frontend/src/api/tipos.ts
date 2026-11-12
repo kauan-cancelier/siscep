@@ -135,6 +135,18 @@ export interface ReposicaoItem {
   fornecedor: string | null;
   contatoFornecedor: string | null;
   prazoEntregaDias: number | null;
+  consumoMedioDiario: number;
+  diasParaEsgotar: number | null;
+}
+
+export interface Auditoria {
+  id: number;
+  usuarioNome: string;
+  acao: string;
+  entidade: string;
+  entidadeId: number | null;
+  detalhes: string | null;
+  criadoEm: string;
 }
 
 export interface HistoricoMinimo {

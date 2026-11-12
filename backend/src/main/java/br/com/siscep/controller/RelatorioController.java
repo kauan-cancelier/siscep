@@ -119,10 +119,12 @@ public class RelatorioController {
     @GetMapping("/reposicao/exportar")
     public ResponseEntity<byte[]> exportarReposicao(@RequestParam(defaultValue = "pdf") String formato) {
         List<String> cab = List.of("Código", "Descrição", "Situação", "Saldo", "Mínimo", "Qtd. sugerida",
-                "Fornecedor", "Contato", "Prazo (dias)");
+                "Consumo médio/dia", "Esgota em (dias)", "Fornecedor", "Contato", "Prazo (dias)");
         List<List<String>> linhas = relatorioService.reposicao().stream().map(r -> List.of(
                 r.codigo(), r.descricao(), r.situacao().name(), String.valueOf(r.saldoAtual()),
-                String.valueOf(r.estoqueMinimo()), String.valueOf(r.quantidadeSugerida()), nvl(r.fornecedor()),
+                String.valueOf(r.estoqueMinimo()), String.valueOf(r.quantidadeSugerida()),
+                r.consumoMedioDiario().toPlainString(),
+                r.diasParaEsgotar() == null ? "-" : r.diasParaEsgotar().toString(), nvl(r.fornecedor()),
                 nvl(r.contatoFornecedor()), r.prazoEntregaDias() == null ? "" : r.prazoEntregaDias().toString()))
                 .toList();
         return exportar(formato, "reposicao", "Relatório de necessidade de reposição",
