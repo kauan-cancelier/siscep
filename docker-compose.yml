@@ -1,0 +1,67 @@
+name: siscep
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-siscep}
+      POSTGRES_USER: ${DB_USERNAME:-siscep}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-siscep}
+      TZ: America/Sao_Paulo
+    volumes:
+      - dados-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: ./backend
+      args:
+        MAVEN_MIRROR_URL: ${MAVEN_MIRROR_URL:-}
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/${DB_NAME:-siscep}
+      DB_USERNAME: ${DB_USERNAME:-siscep}
+      DB_PASSWORD: ${DB_PASSWORD:-siscep}
+      JWT_SECRET: ${JWT_SECRET:?defina JWT_SECRET no arquivo .env (copie de .env.example)}
+      JWT_EXPIRACAO_MINUTOS: ${JWT_EXPIRACAO_MINUTOS:-480}
+    ports:
+      - "${API_PORT:-8080}:8080"
+
+  web:
+    build: ./frontend
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "${WEB_PORT:-80}:80"
+
+  backup:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PGHOST: db
+      PGDATABASE: ${DB_NAME:-siscep}
+      PGUSER: ${DB_USERNAME:-siscep}
+      PGPASSWORD: ${DB_PASSWORD:-siscep}
+      BACKUP_HORARIO: ${BACKUP_HORARIO:-02:00}
+      BACKUP_RETENCAO_DIAS: 7
+      TZ: America/Sao_Paulo
+    volumes:
+      - ./infra/backup/backup.sh:/backup.sh:ro
+      - ./backups:/backups
+    entrypoint: ["/bin/sh", "/backup.sh"]
+
+volumes:
+  dados-postgres:
