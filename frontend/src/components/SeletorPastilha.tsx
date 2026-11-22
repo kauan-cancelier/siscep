@@ -18,7 +18,10 @@ export default function SeletorPastilha({
   const [aberto, setAberto] = useState(false);
 
   useEffect(() => {
-    if (!aberto) return;
+    if (!aberto) {
+      setOpcoes([]);
+      return;
+    }
     const t = setTimeout(() => {
       api
         .get<Pagina<Pastilha>>('/api/pastilhas', { termo, ativo: true, size: 10, sort: 'codigo' })
@@ -36,7 +39,7 @@ export default function SeletorPastilha({
             {valor.codigo} <SituacaoBadge situacao={valor.situacao} />
           </p>
           <p className="text-slate-600">
-            {valor.descricao} - saldo atual: <strong>{valor.saldoAtual}</strong> {valor.unidadeMedida} (minimo {valor.estoqueMinimo})
+            {valor.descricao} - saldo atual: <strong>{valor.saldoAtual}</strong> {valor.unidadeMedida} (mínimo {valor.estoqueMinimo})
           </p>
         </div>
         <button type="button" className="btn-link" onClick={() => aoSelecionar(null)}>

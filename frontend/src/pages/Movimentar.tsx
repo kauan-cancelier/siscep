@@ -87,7 +87,7 @@ export default function Movimentar({ tipo }: { tipo: TipoMovimentacao }) {
           <input id="quantidade" type="number" inputMode="numeric" min={tipo === 'AJUSTE' ? 0 : 1} step={1} className="campo" value={quantidade} onChange={(e) => setQuantidade(e.target.value)} required />
         </Campo>
         {tipo === 'AJUSTE' && pastilha && quantidade !== '' && (
-          <p className="text-sm text-slate-600">Diferenca a registrar: <strong>{qtd - pastilha.saldoAtual > 0 ? '+' : ''}{qtd - pastilha.saldoAtual}</strong></p>
+          <p className="text-sm text-slate-600">Diferença a registrar: <strong>{qtd - pastilha.saldoAtual > 0 ? '+' : ''}{qtd - pastilha.saldoAtual}</strong></p>
         )}
         {tipo === 'ENTRADA' && (
           <div className="grid gap-4 sm:grid-cols-2">
