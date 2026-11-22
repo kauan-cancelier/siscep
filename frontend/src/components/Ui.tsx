@@ -153,7 +153,7 @@ export function Paginacao({
           disabled={pagina + 1 >= totalPaginas}
           onClick={() => aoMudar(pagina + 1)}
         >
-          Proxima
+          Próxima
         </button>
       </div>
     </div>

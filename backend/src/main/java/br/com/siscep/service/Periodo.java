@@ -15,13 +15,13 @@ public final class Periodo {
 
     public static void validar(LocalDate inicio, LocalDate fim) {
         if (inicio == null || fim == null) {
-            throw new RegraNegocioException("Informe a data inicial e a data final do periodo.");
+            throw new RegraNegocioException("Informe a data inicial e a data final do período.");
         }
         if (inicio.isAfter(fim)) {
-            throw new RegraNegocioException("A data inicial nao pode ser posterior a data final.");
+            throw new RegraNegocioException("A data inicial não pode ser posterior a data final.");
         }
         if (ChronoUnit.DAYS.between(inicio, fim) > MAXIMO_DIAS) {
-            throw new RegraNegocioException("O periodo maximo de consulta e de dois anos.");
+            throw new RegraNegocioException("O período maximo de consulta e de dois anos.");
         }
     }
 

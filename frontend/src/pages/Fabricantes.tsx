@@ -51,7 +51,7 @@ export default function Fabricantes() {
       <div className="cartao overflow-x-auto">
         {carregando ? <Carregando /> : dados?.length === 0 ? <Vazio texto="Nenhum fabricante cadastrado." /> : (
           <table className="tabela">
-            <thead><tr><th>Nome</th><th className="hidden sm:table-cell">Pais</th><th className="hidden md:table-cell">Site</th><th>Status</th><th className="text-right">Acoes</th></tr></thead>
+            <thead><tr><th>Nome</th><th className="hidden sm:table-cell">País</th><th className="hidden md:table-cell">Site</th><th>Status</th><th className="text-right">Ações</th></tr></thead>
             <tbody className="divide-y divide-slate-100">
               {dados?.map((f) => (
                 <tr key={f.id}>
@@ -72,7 +72,7 @@ export default function Fabricantes() {
         <form onSubmit={salvar} className="space-y-4">
           {erroForm && <Mensagem tipo="erro">{erroForm}</Mensagem>}
           <Campo rotulo="Nome" id="fnome"><input id="fnome" className="campo" maxLength={120} value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} required /></Campo>
-          <Campo rotulo="Pais" id="fpais"><input id="fpais" className="campo" maxLength={60} value={form.pais} onChange={(e) => setForm({ ...form, pais: e.target.value })} /></Campo>
+          <Campo rotulo="País" id="fpais"><input id="fpais" className="campo" maxLength={60} value={form.pais} onChange={(e) => setForm({ ...form, pais: e.target.value })} /></Campo>
           <Campo rotulo="Site" id="fsite"><input id="fsite" className="campo" maxLength={160} value={form.site} onChange={(e) => setForm({ ...form, site: e.target.value })} /></Campo>
           <div className="flex justify-end gap-2"><button type="button" className="btn-secundario" onClick={() => setAberto(false)}>Cancelar</button><button type="submit" className="btn-primario">Salvar</button></div>
         </form>

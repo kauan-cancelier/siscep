@@ -28,20 +28,20 @@ export default function Relatorios() {
     [aba, inicio, fim],
   );
   const abas = [
-    { id: 'reposicao', rotulo: 'Necessidade de reposicao' },
+    { id: 'reposicao', rotulo: 'Necessidade de reposição' },
     { id: 'consumo', rotulo: 'Consumo por pastilha' },
-    { id: 'movimentacoes', rotulo: 'Movimentacoes por periodo' },
+    { id: 'movimentacoes', rotulo: 'Movimentações por período' },
   ] as const;
   const periodo = (
     <div className="flex flex-wrap items-end gap-2">
       <div><label htmlFor="ri" className="rotulo">De</label><input id="ri" type="date" className="campo" value={inicio} onChange={(e) => setInicio(e.target.value)} /></div>
-      <div><label htmlFor="rf" className="rotulo">Ate</label><input id="rf" type="date" className="campo" value={fim} onChange={(e) => setFim(e.target.value)} /></div>
+      <div><label htmlFor="rf" className="rotulo">Até</label><input id="rf" type="date" className="campo" value={fim} onChange={(e) => setFim(e.target.value)} /></div>
     </div>
   );
 
   return (
     <>
-      <Titulo titulo="Relatorios" descricao="Emissao e exportacao em PDF ou CSV" />
+      <Titulo titulo="Relatórios" descricao="Emissão e exportação em PDF ou CSV" />
       <div role="tablist" className="mb-4 flex flex-wrap gap-1 border-b border-slate-200">
         {abas.map((a) => (
           <button key={a.id} role="tab" aria-selected={aba === a.id} type="button" onClick={() => setAba(a.id)}
@@ -58,10 +58,10 @@ export default function Relatorios() {
             <BotoesExportar url="/api/relatorios/reposicao/exportar" params={{}} nome="reposicao" />
           </div>
           {reposicao.erro && <Mensagem tipo="erro">{reposicao.erro}</Mensagem>}
-          {reposicao.carregando ? <Carregando /> : reposicao.dados?.length === 0 ? <Vazio texto="Nenhum item precisa de reposicao." /> : (
+          {reposicao.carregando ? <Carregando /> : reposicao.dados?.length === 0 ? <Vazio texto="Nenhum item precisa de reposição." /> : (
             <div className="overflow-x-auto">
               <table className="tabela">
-                <thead><tr><th>Codigo</th><th>Descricao</th><th>Situacao</th><th className="text-right">Saldo</th><th className="text-right">Minimo</th><th className="text-right">Sugerido</th><th>Fornecedor</th><th className="hidden lg:table-cell">Contato</th><th className="text-right">Prazo</th></tr></thead>
+                <thead><tr><th>Código</th><th>Descrição</th><th>Situação</th><th className="text-right">Saldo</th><th className="text-right">Mínimo</th><th className="text-right">Sugerido</th><th>Fornecedor</th><th className="hidden lg:table-cell">Contato</th><th className="text-right">Prazo</th></tr></thead>
                 <tbody className="divide-y divide-slate-100">
                   {reposicao.dados?.map((r) => (
                     <tr key={r.pastilhaId}>
@@ -86,10 +86,10 @@ export default function Relatorios() {
             <BotoesExportar url="/api/relatorios/consumo/exportar" params={{ inicio, fim }} nome="consumo" />
           </div>
           {consumo.erro && <div className="p-4"><Mensagem tipo="erro">{consumo.erro}</Mensagem></div>}
-          {consumo.carregando ? <Carregando /> : consumo.dados?.length === 0 ? <Vazio texto="Nenhuma saida no periodo." /> : (
+          {consumo.carregando ? <Carregando /> : consumo.dados?.length === 0 ? <Vazio texto="Nenhuma saída no período." /> : (
             <div className="overflow-x-auto">
               <table className="tabela">
-                <thead><tr><th>Codigo</th><th>Descricao</th><th className="text-right">Total consumido</th><th className="text-right">N. saidas</th><th className="text-right">Media diaria</th><th className="text-right">Media mensal</th></tr></thead>
+                <thead><tr><th>Código</th><th>Descrição</th><th className="text-right">Total consumido</th><th className="text-right">N. saídas</th><th className="text-right">Média diária</th><th className="text-right">Média mensal</th></tr></thead>
                 <tbody className="divide-y divide-slate-100">
                   {consumo.dados?.map((c) => (
                     <tr key={c.pastilhaId}>
@@ -107,7 +107,7 @@ export default function Relatorios() {
 
       {aba === 'movimentacoes' && (
         <section className="cartao space-y-4 p-4" role="tabpanel">
-          <p className="text-sm text-slate-600">Relatorio completo de entradas, saidas e ajustes no periodo, com usuario, saldo resultante e justificativas.</p>
+          <p className="text-sm text-slate-600">Relatório completo de entradas, saídas e ajustes no período, com usuário, saldo resultante e justificativas.</p>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             {periodo}
             <BotoesExportar url="/api/relatorios/movimentacoes/exportar" params={{ inicio, fim }} nome="movimentacoes" />

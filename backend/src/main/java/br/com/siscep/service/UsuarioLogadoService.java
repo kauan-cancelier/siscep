@@ -17,9 +17,9 @@ public class UsuarioLogadoService {
 
     public Usuario carregar(UsuarioAutenticado principal) {
         if (principal == null) {
-            throw new AutenticacaoException("Autenticacao necessaria.");
+            throw new AutenticacaoException("Autenticação necessária.");
         }
         return usuarioRepository.findById(principal.id())
-                .orElseThrow(() -> new AutenticacaoException("Usuario autenticado nao encontrado."));
+                .orElseThrow(() -> new AutenticacaoException("Usuário autenticado não encontrado."));
     }
 }

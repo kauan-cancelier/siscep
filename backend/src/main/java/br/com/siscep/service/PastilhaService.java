@@ -76,7 +76,7 @@ public class PastilhaService {
     public PastilhaResponse criar(PastilhaRequest req, Usuario usuario) {
         String codigo = normalizarCodigo(req.codigo());
         if (pastilhaRepository.existsByCodigoIgnoreCase(codigo)) {
-            throw new ConflitoException("Ja existe uma pastilha com o codigo " + codigo + ".");
+            throw new ConflitoException("Já existe uma pastilha com o código " + codigo + ".");
         }
         Pastilha p = new Pastilha(codigo, req.descricao().trim(), req.estoqueMinimo());
         preencher(p, req);
@@ -92,10 +92,10 @@ public class PastilhaService {
         if (!codigo.equalsIgnoreCase(p.getCodigo())) {
             if (movimentacaoRepository.existsByPastilhaId(id)) {
                 throw new RegraNegocioException(
-                        "O codigo da pastilha nao pode ser alterado apos o primeiro registro de movimentacao.");
+                        "O código da pastilha não pode ser alterado após o primeiro registro de movimentação.");
             }
             if (pastilhaRepository.existsByCodigoIgnoreCaseAndIdNot(codigo, id)) {
-                throw new ConflitoException("Ja existe uma pastilha com o codigo " + codigo + ".");
+                throw new ConflitoException("Já existe uma pastilha com o código " + codigo + ".");
             }
             p.setCodigo(codigo);
         }
@@ -125,7 +125,7 @@ public class PastilhaService {
         Pastilha p = obter(id);
         if (movimentacaoRepository.existsByPastilhaId(id)) {
             throw new RegraNegocioException(
-                    "A pastilha possui movimentacoes registradas e nao pode ser excluida; inative-a.");
+                    "A pastilha possui movimentações registradas e não pode ser excluída; inative-a.");
         }
         pastilhaFornecedorRepository.deleteAll(pastilhaFornecedorRepository.findByPastilhaId(id));
         pastilhaRepository.delete(p);

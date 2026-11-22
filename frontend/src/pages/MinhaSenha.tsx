@@ -12,7 +12,7 @@ export default function MinhaSenha() {
   async function enviar(e: FormEvent) {
     e.preventDefault();
     if (novaSenha !== confirmacao) {
-      setMsg({ tipo: 'erro', texto: 'A confirmacao nao confere com a nova senha.' });
+      setMsg({ tipo: 'erro', texto: 'A confirmação não confere com a nova senha.' });
       return;
     }
     try {
@@ -34,7 +34,7 @@ export default function MinhaSenha() {
         <Campo rotulo="Senha atual" id="atual">
           <input id="atual" type="password" className="campo" value={senhaAtual} onChange={(e) => setSenhaAtual(e.target.value)} required autoComplete="current-password" />
         </Campo>
-        <Campo rotulo="Nova senha (minimo 8 caracteres)" id="nova">
+        <Campo rotulo="Nova senha (mínimo 8 caracteres)" id="nova">
           <input id="nova" type="password" className="campo" minLength={8} value={novaSenha} onChange={(e) => setNovaSenha(e.target.value)} required autoComplete="new-password" />
         </Campo>
         <Campo rotulo="Confirme a nova senha" id="conf">

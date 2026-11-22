@@ -80,13 +80,13 @@ class PastilhaTest {
         assertThat(p.getEstoqueMinimo()).isZero();
     }
 
-    @ParameterizedTest(name = "saldo {0}, minimo {1} -> {2}")
+    @ParameterizedTest(name = "saldo {0}, mínimo {1} -> {2}")
     @CsvSource({"0,5,ZERADO", "0,0,ZERADO", "1,5,CRITICO", "5,5,CRITICO", "6,5,NORMAL", "1,0,NORMAL"})
     void situacaoSegueRn08(int saldo, int minimo, StatusEstoque esperado) {
         assertThat(pastilha(saldo, minimo).situacao()).isEqualTo(esperado);
     }
 
-    @ParameterizedTest(name = "saldo {0}, minimo {1} -> sugerir {2}")
+    @ParameterizedTest(name = "saldo {0}, mínimo {1} -> sugerir {2}")
     @CsvSource({"2,10,18", "10,10,10", "0,10,20", "0,0,1", "11,10,0", "19,10,0"})
     void quantidadeSugeridaSegueRn12(int saldo, int minimo, int esperado) {
         assertThat(pastilha(saldo, minimo).quantidadeSugeridaCompra()).isEqualTo(esperado);

@@ -13,25 +13,25 @@ function logadoComo(perfil: Perfil) {
 }
 
 describe('menu por perfil', () => {
-  it('operador ve apenas estoque, saida e historico', async () => {
+  it('operador vê apenas estoque, saída e histórico', async () => {
     logadoComo('OPERADOR');
     renderizar('/estoque');
-    expect(await screen.findByRole('link', { name: /Registrar saida/ })).toBeInTheDocument();
+    expect(await screen.findByRole('link', { name: /Registrar saída/ })).toBeInTheDocument();
     expect(screen.queryByRole('link', { name: /Registrar entrada/ })).not.toBeInTheDocument();
-    expect(screen.queryByRole('link', { name: /Usuarios/ })).not.toBeInTheDocument();
-    expect(screen.queryByRole('link', { name: /Relatorios/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: /Usuários/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: /Relatórios/ })).not.toBeInTheDocument();
   });
 
-  it('administrador gerencia usuarios mas nao movimenta estoque', async () => {
+  it('administrador gerencia usuários mas não movimenta estoque', async () => {
     logadoComo('ADMINISTRADOR');
     renderizar('/estoque');
-    expect(await screen.findByRole('link', { name: /Usuarios/ })).toBeInTheDocument();
-    expect(screen.queryByRole('link', { name: /Registrar saida/ })).not.toBeInTheDocument();
+    expect(await screen.findByRole('link', { name: /Usuários/ })).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: /Registrar saída/ })).not.toBeInTheDocument();
   });
 
-  it('bloqueia acesso direto por URL a tela sem permissao', async () => {
+  it('bloqueia acesso direto por URL a tela sem permissão', async () => {
     logadoComo('GESTOR');
     renderizar('/movimentacoes/entrada');
-    expect(await screen.findByText(/nao tem permissao/)).toBeInTheDocument();
+    expect(await screen.findByText(/não tem permissão/)).toBeInTheDocument();
   });
 });

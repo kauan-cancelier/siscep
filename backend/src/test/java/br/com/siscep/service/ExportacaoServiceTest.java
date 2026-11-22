@@ -13,9 +13,9 @@ class ExportacaoServiceTest {
 
     @Test
     void csvUsaPontoEVirgulaEBom() {
-        byte[] csv = service.csv(List.of("Codigo", "Descricao"), List.of(List.of("P1", "Pastilha; especial")));
+        byte[] csv = service.csv(List.of("Código", "Descrição"), List.of(List.of("P1", "Pastilha; especial")));
         String texto = new String(csv, StandardCharsets.UTF_8);
-        assertThat(texto).startsWith("\uFEFFCodigo;Descricao\r\n");
+        assertThat(texto).startsWith("\uFEFFCódigo;Descrição\r\n");
         assertThat(texto).contains("P1;\"Pastilha; especial\"");
     }
 

@@ -53,12 +53,12 @@ export default function Usuarios() {
 
   return (
     <>
-      <Titulo titulo="Usuarios" descricao="Cadastro, perfis de acesso e auditoria de login" acoes={<button type="button" className="btn-primario" onClick={() => abrir(null)}><Plus className="h-4 w-4" aria-hidden /> Novo usuario</button>} />
+      <Titulo titulo="Usuários" descricao="Cadastro, perfis de acesso e auditoria de login" acoes={<button type="button" className="btn-primario" onClick={() => abrir(null)}><Plus className="h-4 w-4" aria-hidden /> Novo usuário</button>} />
       {(erro || msg) && <div className="mb-3"><Mensagem tipo={msg?.tipo ?? 'erro'}>{erro ?? msg?.texto}</Mensagem></div>}
       <div className="cartao overflow-x-auto">
         {carregando ? <Carregando /> : (
           <table className="tabela">
-            <thead><tr><th>Nome</th><th className="hidden md:table-cell">E-mail</th><th>Perfil</th><th>Status</th><th className="hidden lg:table-cell">Ultimo acesso</th><th className="text-right">Acoes</th></tr></thead>
+            <thead><tr><th>Nome</th><th className="hidden md:table-cell">E-mail</th><th>Perfil</th><th>Status</th><th className="hidden lg:table-cell">Último acesso</th><th className="text-right">Ações</th></tr></thead>
             <tbody className="divide-y divide-slate-100">
               {dados?.map((u) => (
                 <tr key={u.id}>
@@ -68,7 +68,7 @@ export default function Usuarios() {
                   <td className="space-x-3 whitespace-nowrap text-right">
                     <button type="button" className="btn-link" onClick={() => abrir(u)}>Editar</button>
                     <button type="button" className="btn-link" onClick={() => { setSenhaDe(u); setNovaSenha(''); }}>Redefinir senha</button>
-                    {u.bloqueado && <button type="button" className="btn-link" onClick={() => acao(() => api.post(`/api/usuarios/${u.id}/desbloquear`), 'Usuario desbloqueado.')}>Desbloquear</button>}
+                    {u.bloqueado && <button type="button" className="btn-link" onClick={() => acao(() => api.post(`/api/usuarios/${u.id}/desbloquear`), 'Usuário desbloqueado.')}>Desbloquear</button>}
                     {u.id !== logado?.id && <button type="button" className="btn-link" onClick={() => acao(() => api.patch(`/api/usuarios/${u.id}/status`, { ativo: !u.ativo }))}>{u.ativo ? 'Inativar' : 'Ativar'}</button>}
                   </td>
                 </tr>
@@ -79,7 +79,7 @@ export default function Usuarios() {
       </div>
 
       <section className="cartao mt-6 overflow-x-auto" aria-labelledby="acessos">
-        <h2 id="acessos" className="border-b border-slate-200 px-4 py-3 font-semibold">Ultimos acessos</h2>
+        <h2 id="acessos" className="border-b border-slate-200 px-4 py-3 font-semibold">Últimos acessos</h2>
         {acessos.dados?.conteudo.length === 0 ? <Vazio texto="Sem registros." /> : (
           <table className="tabela">
             <thead><tr><th>Data/hora</th><th>E-mail</th><th>Resultado</th><th className="hidden md:table-cell">IP</th></tr></thead>
@@ -96,12 +96,12 @@ export default function Usuarios() {
         )}
       </section>
 
-      <Modal aberto={aberto} titulo={editando ? 'Editar usuario' : 'Novo usuario'} aoFechar={() => setAberto(false)}>
+      <Modal aberto={aberto} titulo={editando ? 'Editar usuário' : 'Novo usuário'} aoFechar={() => setAberto(false)}>
         <form onSubmit={salvar} className="space-y-4">
           {erroForm && <Mensagem tipo="erro">{erroForm}</Mensagem>}
           <Campo rotulo="Nome" id="unome"><input id="unome" className="campo" maxLength={120} value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} required /></Campo>
           <Campo rotulo="E-mail" id="uemail"><input id="uemail" type="email" className="campo" maxLength={160} value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required /></Campo>
-          {!editando && <Campo rotulo="Senha inicial (minimo 8 caracteres)" id="usenha"><input id="usenha" type="password" className="campo" minLength={8} value={form.senha} onChange={(e) => setForm({ ...form, senha: e.target.value })} required autoComplete="new-password" /></Campo>}
+          {!editando && <Campo rotulo="Senha inicial (mínimo 8 caracteres)" id="usenha"><input id="usenha" type="password" className="campo" minLength={8} value={form.senha} onChange={(e) => setForm({ ...form, senha: e.target.value })} required autoComplete="new-password" /></Campo>}
           <Campo rotulo="Perfil" id="uperfil">
             <select id="uperfil" className="campo" value={form.perfil} disabled={editando?.id === logado?.id} onChange={(e) => setForm({ ...form, perfil: e.target.value as Perfil })}>
               {Object.entries(NOMES_PERFIL).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
@@ -113,7 +113,7 @@ export default function Usuarios() {
 
       <Modal aberto={!!senhaDe} titulo={`Redefinir senha de ${senhaDe?.nome ?? ''}`} aoFechar={() => setSenhaDe(null)}>
         <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); const u = senhaDe; setSenhaDe(null); if (u) acao(() => api.post(`/api/usuarios/${u.id}/redefinir-senha`, { novaSenha }), 'Senha redefinida.'); }}>
-          <Campo rotulo="Nova senha (minimo 8 caracteres)" id="rsenha"><input id="rsenha" type="password" className="campo" minLength={8} value={novaSenha} onChange={(e) => setNovaSenha(e.target.value)} required autoComplete="new-password" /></Campo>
+          <Campo rotulo="Nova senha (mínimo 8 caracteres)" id="rsenha"><input id="rsenha" type="password" className="campo" minLength={8} value={novaSenha} onChange={(e) => setNovaSenha(e.target.value)} required autoComplete="new-password" /></Campo>
           <div className="flex justify-end gap-2"><button type="button" className="btn-secundario" onClick={() => setSenhaDe(null)}>Cancelar</button><button type="submit" className="btn-primario">Redefinir</button></div>
         </form>
       </Modal>

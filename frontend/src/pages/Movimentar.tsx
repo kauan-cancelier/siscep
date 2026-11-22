@@ -9,8 +9,8 @@ import { mensagemErro } from '../utils/useCarregar';
 
 const TEXTOS: Record<TipoMovimentacao, { titulo: string; descricao: string; url: string }> = {
   ENTRADA: { titulo: 'Registrar entrada', descricao: 'Recebimento de pastilhas de um fornecedor', url: '/api/movimentacoes/entradas' },
-  SAIDA: { titulo: 'Registrar saida', descricao: 'Retirada de pastilhas para producao', url: '/api/movimentacoes/saidas' },
-  AJUSTE: { titulo: 'Ajuste de inventario', descricao: 'Corrige o saldo do sistema a partir da contagem fisica', url: '/api/movimentacoes/ajustes' },
+  SAIDA: { titulo: 'Registrar saída', descricao: 'Retirada de pastilhas para produção', url: '/api/movimentacoes/saidas' },
+  AJUSTE: { titulo: 'Ajuste de inventário', descricao: 'Corrige o saldo do sistema a partir da contagem física', url: '/api/movimentacoes/ajustes' },
 };
 
 export default function Movimentar({ tipo }: { tipo: TipoMovimentacao }) {
@@ -72,7 +72,7 @@ export default function Movimentar({ tipo }: { tipo: TipoMovimentacao }) {
         {ultima && (
           <Mensagem tipo="sucesso">
             {NOMES_TIPO[ultima.tipo]} registrada para <strong>{ultima.pastilhaCodigo}</strong>: saldo {ultima.saldoAnterior} → {ultima.saldoResultante}.{' '}
-            <Link to="/movimentacoes" className="underline">Ver historico</Link>
+            <Link to="/movimentacoes" className="underline">Ver histórico</Link>
           </Mensagem>
         )}
         {erro && <Mensagem tipo="erro">{erro}</Mensagem>}
@@ -80,9 +80,9 @@ export default function Movimentar({ tipo }: { tipo: TipoMovimentacao }) {
           <SeletorPastilha valor={pastilha} aoSelecionar={setPastilha} />
         </Campo>
         <Campo
-          rotulo={tipo === 'AJUSTE' ? 'Contagem fisica (quantidade real em estoque)' : 'Quantidade'}
+          rotulo={tipo === 'AJUSTE' ? 'Contagem física (quantidade real em estoque)' : 'Quantidade'}
           id="quantidade"
-          erro={saldoInsuficiente ? `Saldo insuficiente: disponivel ${pastilha?.saldoAtual}.` : undefined}
+          erro={saldoInsuficiente ? `Saldo insuficiente: disponível ${pastilha?.saldoAtual}.` : undefined}
         >
           <input id="quantidade" type="number" inputMode="numeric" min={tipo === 'AJUSTE' ? 0 : 1} step={1} className="campo" value={quantidade} onChange={(e) => setQuantidade(e.target.value)} required />
         </Campo>
@@ -97,22 +97,22 @@ export default function Movimentar({ tipo }: { tipo: TipoMovimentacao }) {
                 {fornecedores.map((f) => <option key={f.id} value={f.id}>{f.razaoSocial}</option>)}
               </select>
             </Campo>
-            <Campo rotulo="Documento de referencia (nota fiscal)" id="documento">
+            <Campo rotulo="Documento de referência (nota fiscal)" id="documento">
               <input id="documento" className="campo" maxLength={60} value={documento} onChange={(e) => setDocumento(e.target.value)} />
             </Campo>
           </div>
         )}
         {tipo === 'SAIDA' && (
-          <Campo rotulo="Destino (ordem de producao, maquina ou setor)" id="destino">
+          <Campo rotulo="Destino (ordem de produção, máquina ou setor)" id="destino">
             <input id="destino" className="campo" maxLength={120} value={destino} onChange={(e) => setDestino(e.target.value)} required />
           </Campo>
         )}
         {tipo === 'AJUSTE' ? (
-          <Campo rotulo="Justificativa (obrigatoria)" id="justificativa">
+          <Campo rotulo="Justificativa (obrigatória)" id="justificativa">
             <textarea id="justificativa" className="campo" rows={3} maxLength={500} value={justificativa} onChange={(e) => setJustificativa(e.target.value)} required />
           </Campo>
         ) : (
-          <Campo rotulo="Observacao" id="observacao">
+          <Campo rotulo="Observação" id="observacao">
             <textarea id="observacao" className="campo" rows={2} maxLength={500} value={observacao} onChange={(e) => setObservacao(e.target.value)} />
           </Campo>
         )}

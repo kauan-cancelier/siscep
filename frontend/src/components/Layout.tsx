@@ -32,7 +32,7 @@ interface Item {
 
 const MENU: { grupo: string; itens: Item[] }[] = [
   {
-    grupo: 'Visao geral',
+    grupo: 'Visão geral',
     itens: [
       { para: '/dashboard', rotulo: 'Dashboard', icone: LayoutDashboard, permissao: 'dashboard' },
       { para: '/estoque', rotulo: 'Estoque atual', icone: Boxes, permissao: 'estoque' },
@@ -40,12 +40,12 @@ const MENU: { grupo: string; itens: Item[] }[] = [
     ],
   },
   {
-    grupo: 'Movimentacoes',
+    grupo: 'Movimentações',
     itens: [
       { para: '/movimentacoes/entrada', rotulo: 'Registrar entrada', icone: ArrowDownToLine, permissao: 'entrada' },
-      { para: '/movimentacoes/saida', rotulo: 'Registrar saida', icone: ArrowUpFromLine, permissao: 'saida' },
-      { para: '/movimentacoes/ajuste', rotulo: 'Ajuste de inventario', icone: SlidersHorizontal, permissao: 'ajuste' },
-      { para: '/movimentacoes', rotulo: 'Historico', icone: History, permissao: 'historico' },
+      { para: '/movimentacoes/saida', rotulo: 'Registrar saída', icone: ArrowUpFromLine, permissao: 'saida' },
+      { para: '/movimentacoes/ajuste', rotulo: 'Ajuste de inventário', icone: SlidersHorizontal, permissao: 'ajuste' },
+      { para: '/movimentacoes', rotulo: 'Histórico', icone: History, permissao: 'historico' },
     ],
   },
   {
@@ -54,12 +54,12 @@ const MENU: { grupo: string; itens: Item[] }[] = [
       { para: '/pastilhas', rotulo: 'Pastilhas', icone: ClipboardList, permissao: 'cadastros' },
       { para: '/fabricantes', rotulo: 'Fabricantes', icone: Factory, permissao: 'cadastros' },
       { para: '/fornecedores', rotulo: 'Fornecedores', icone: Truck, permissao: 'cadastros' },
-      { para: '/usuarios', rotulo: 'Usuarios', icone: Users, permissao: 'usuarios' },
+      { para: '/usuarios', rotulo: 'Usuários', icone: Users, permissao: 'usuarios' },
     ],
   },
   {
-    grupo: 'Analise',
-    itens: [{ para: '/relatorios', rotulo: 'Relatorios', icone: FileBarChart, permissao: 'relatorios' }],
+    grupo: 'Análise',
+    itens: [{ para: '/relatorios', rotulo: 'Relatórios', icone: FileBarChart, permissao: 'relatorios' }],
   },
 ];
 

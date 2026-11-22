@@ -30,7 +30,7 @@ public class DashboardController {
         this.alertaService = alertaService;
     }
 
-    @Operation(summary = "Indicadores do estoque no periodo (RF15)")
+    @Operation(summary = "Indicadores do estoque no período (RF15)")
     @GetMapping("/dashboard")
     @PreAuthorize(Perfis.GESTAO)
     public DashboardResponse dashboard(

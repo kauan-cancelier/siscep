@@ -112,7 +112,7 @@ public class EstoqueService {
         Pastilha p = pastilhaRepository.findByIdParaAtualizacao(pastilhaId)
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Pastilha", pastilhaId));
         if (!p.isAtivo()) {
-            throw new RegraNegocioException("A pastilha " + p.getCodigo() + " esta inativa e nao aceita movimentacoes.");
+            throw new RegraNegocioException("A pastilha " + p.getCodigo() + " esta inativa e não aceita movimentações.");
         }
         return p;
     }

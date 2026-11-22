@@ -38,7 +38,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/relatorios")
 @PreAuthorize(Perfis.GESTAO)
-@Tag(name = "Relatorios")
+@Tag(name = "Relatórios")
 public class RelatorioController {
 
     /** Limite de linhas por exportacao, suficiente para o volume previsto no RNF07. */
@@ -61,7 +61,7 @@ public class RelatorioController {
         this.usuarioLogado = usuarioLogado;
     }
 
-    @Operation(summary = "Relatorio de consumo por pastilha (RF17)")
+    @Operation(summary = "Relatório de consumo por pastilha (RF17)")
     @GetMapping("/consumo")
     public List<RelatorioConsumoItem> consumo(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate inicio,
@@ -69,13 +69,13 @@ public class RelatorioController {
         return relatorioService.consumo(inicio, fim);
     }
 
-    @Operation(summary = "Relatorio de necessidade de reposicao (RF18)")
+    @Operation(summary = "Relatório de necessidade de reposição (RF18)")
     @GetMapping("/reposicao")
     public List<RelatorioReposicaoItem> reposicao() {
         return relatorioService.reposicao();
     }
 
-    @Operation(summary = "Exporta o relatorio de movimentacoes por periodo em PDF ou CSV (RF16 / RF19)")
+    @Operation(summary = "Exporta o relatório de movimentações por período em PDF ou CSV (RF16 / RF19)")
     @GetMapping("/movimentacoes/exportar")
     public ResponseEntity<byte[]> exportarMovimentacoes(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate inicio,
@@ -89,7 +89,7 @@ public class RelatorioController {
         List<MovimentacaoResponse> movs = estoqueService.historico(inicio.atStartOfDay(), fim.atTime(LocalTime.MAX),
                 pastilhaId, tipo, usuarioId, usuarioLogado.carregar(principal),
                 PageRequest.of(0, LIMITE_EXPORTACAO, Sort.by("dataHora"))).conteudo();
-        List<String> cab = List.of("Data/hora", "Tipo", "Codigo", "Descricao", "Qtd", "Saldo ant.", "Saldo result.",
+        List<String> cab = List.of("Data/hora", "Tipo", "Código", "Descrição", "Qtd", "Saldo ant.", "Saldo result.",
                 "Usuario", "Fornecedor/Destino", "Documento", "Justificativa/Obs.");
         List<List<String>> linhas = movs.stream().map(m -> List.of(
                 ExportacaoService.formatar(m.dataHora()), m.tipo().name(), m.pastilhaCodigo(), m.pastilhaDescricao(),
@@ -97,36 +97,36 @@ public class RelatorioController {
                 String.valueOf(m.saldoResultante()), m.usuarioNome(),
                 nvl(m.fornecedorNome() != null ? m.fornecedorNome() : m.destino()), nvl(m.documentoReferencia()),
                 nvl(m.justificativa() != null ? m.justificativa() : m.observacao()))).toList();
-        return exportar(formato, "movimentacoes", "Relatorio de movimentacoes", periodo(inicio, fim), cab, linhas);
+        return exportar(formato, "movimentacoes", "Relatório de movimentações", periodo(inicio, fim), cab, linhas);
     }
 
-    @Operation(summary = "Exporta o relatorio de consumo em PDF ou CSV (RF17 / RF19)")
+    @Operation(summary = "Exporta o relatório de consumo em PDF ou CSV (RF17 / RF19)")
     @GetMapping("/consumo/exportar")
     public ResponseEntity<byte[]> exportarConsumo(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate inicio,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fim,
             @RequestParam(defaultValue = "pdf") String formato) {
-        List<String> cab = List.of("Codigo", "Descricao", "Total consumido", "N. de saidas", "Media diaria",
-                "Media mensal");
+        List<String> cab = List.of("Código", "Descrição", "Total consumido", "N. de saídas", "Média diária",
+                "Média mensal");
         List<List<String>> linhas = relatorioService.consumo(inicio, fim).stream().map(c -> List.of(
                 c.codigo(), c.descricao(), String.valueOf(c.totalConsumido()), String.valueOf(c.quantidadeSaidas()),
                 c.mediaDiaria().toPlainString().replace('.', ','),
                 c.mediaMensal().toPlainString().replace('.', ','))).toList();
-        return exportar(formato, "consumo", "Relatorio de consumo por pastilha", periodo(inicio, fim), cab, linhas);
+        return exportar(formato, "consumo", "Relatório de consumo por pastilha", periodo(inicio, fim), cab, linhas);
     }
 
-    @Operation(summary = "Exporta o relatorio de reposicao em PDF ou CSV (RF18 / RF19)")
+    @Operation(summary = "Exporta o relatório de reposição em PDF ou CSV (RF18 / RF19)")
     @GetMapping("/reposicao/exportar")
     public ResponseEntity<byte[]> exportarReposicao(@RequestParam(defaultValue = "pdf") String formato) {
-        List<String> cab = List.of("Codigo", "Descricao", "Situacao", "Saldo", "Minimo", "Qtd. sugerida",
+        List<String> cab = List.of("Código", "Descrição", "Situação", "Saldo", "Mínimo", "Qtd. sugerida",
                 "Fornecedor", "Contato", "Prazo (dias)");
         List<List<String>> linhas = relatorioService.reposicao().stream().map(r -> List.of(
                 r.codigo(), r.descricao(), r.situacao().name(), String.valueOf(r.saldoAtual()),
                 String.valueOf(r.estoqueMinimo()), String.valueOf(r.quantidadeSugerida()), nvl(r.fornecedor()),
                 nvl(r.contatoFornecedor()), r.prazoEntregaDias() == null ? "" : r.prazoEntregaDias().toString()))
                 .toList();
-        return exportar(formato, "reposicao", "Relatorio de necessidade de reposicao",
-                "Quantidade sugerida = 2 x estoque minimo - saldo atual (RN12)", cab, linhas);
+        return exportar(formato, "reposicao", "Relatório de necessidade de reposição",
+                "Quantidade sugerida = 2 x estoque mínimo - saldo atual (RN12)", cab, linhas);
     }
 
     @Operation(summary = "Exporta a posicao atual do estoque em PDF ou CSV")
@@ -134,8 +134,8 @@ public class RelatorioController {
     public ResponseEntity<byte[]> exportarEstoque(@RequestParam(defaultValue = "pdf") String formato) {
         List<PastilhaResponse> itens = pastilhaService.consultar(null, null, null, null, true,
                 PageRequest.of(0, LIMITE_EXPORTACAO, Sort.by("codigo"))).conteudo();
-        List<String> cab = List.of("Codigo", "Descricao", "Unidade", "Fabricante", "Fornecedor", "Saldo", "Minimo",
-                "Situacao");
+        List<String> cab = List.of("Código", "Descrição", "Unidade", "Fabricante", "Fornecedor", "Saldo", "Mínimo",
+                "Situação");
         List<List<String>> linhas = itens.stream().map(p -> List.of(p.codigo(), p.descricao(), p.unidadeMedida(),
                 nvl(p.fabricanteNome()), nvl(p.fornecedorPrincipalNome()), String.valueOf(p.saldoAtual()),
                 String.valueOf(p.estoqueMinimo()), p.situacao().name())).toList();
@@ -154,7 +154,7 @@ public class RelatorioController {
             conteudo = exportacao.pdf(titulo, subtitulo, cab, linhas);
             tipo = MediaType.APPLICATION_PDF;
         } else {
-            throw new RegraNegocioException("Formato de exportacao invalido. Use pdf ou csv.");
+            throw new RegraNegocioException("Formato de exportação inválido. Use pdf ou csv.");
         }
         return ResponseEntity.ok()
                 .contentType(tipo)
@@ -164,7 +164,7 @@ public class RelatorioController {
     }
 
     private static String periodo(LocalDate inicio, LocalDate fim) {
-        return "Periodo: " + BR.format(inicio) + " a " + BR.format(fim);
+        return "Período: " + BR.format(inicio) + " a " + BR.format(fim);
     }
 
     private static String nvl(String s) {

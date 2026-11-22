@@ -51,11 +51,11 @@ public class UsuarioService {
     @Transactional
     public UsuarioResponse criar(UsuarioRequest req) {
         if (req.senha() == null || req.senha().isBlank()) {
-            throw new RegraNegocioException("Informe a senha inicial do usuario.");
+            throw new RegraNegocioException("Informe a senha inicial do usuário.");
         }
         String email = normalizarEmail(req.email());
         if (usuarioRepository.existsByEmailIgnoreCase(email)) {
-            throw new ConflitoException("Ja existe um usuario com o e-mail " + email + ".");
+            throw new ConflitoException("Já existe um usuário com o e-mail " + email + ".");
         }
         Usuario u = new Usuario(req.nome().trim(), email, passwordEncoder.encode(req.senha()), req.perfil());
         return UsuarioResponse.de(usuarioRepository.save(u), LocalDateTime.now(clock));
@@ -66,10 +66,10 @@ public class UsuarioService {
         Usuario u = obter(id);
         String email = normalizarEmail(req.email());
         if (usuarioRepository.existsByEmailIgnoreCaseAndIdNot(email, id)) {
-            throw new ConflitoException("Ja existe um usuario com o e-mail " + email + ".");
+            throw new ConflitoException("Já existe um usuário com o e-mail " + email + ".");
         }
         if (id.equals(idUsuarioLogado) && u.getPerfil() != req.perfil()) {
-            throw new RegraNegocioException("Voce nao pode alterar o seu proprio perfil.");
+            throw new RegraNegocioException("Você não pode alterar o seu próprio perfil.");
         }
         u.setNome(req.nome().trim());
         u.setEmail(email);
@@ -80,7 +80,7 @@ public class UsuarioService {
     @Transactional
     public UsuarioResponse alterarStatus(Long id, boolean ativo, Long idUsuarioLogado) {
         if (!ativo && id.equals(idUsuarioLogado)) {
-            throw new RegraNegocioException("Voce nao pode inativar o seu proprio usuario.");
+            throw new RegraNegocioException("Você não pode inativar o seu próprio usuário.");
         }
         Usuario u = obter(id);
         u.setAtivo(ativo);

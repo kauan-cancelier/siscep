@@ -40,8 +40,8 @@ export default function Historico() {
   return (
     <>
       <Titulo
-        titulo="Historico de movimentacoes"
-        descricao={operador ? 'Exibindo somente as movimentacoes registradas por voce' : 'Registros imutaveis de entradas, saidas e ajustes'}
+        titulo="Histórico de movimentações"
+        descricao={operador ? 'Exibindo somente as movimentações registradas por você' : 'Registros imutáveis de entradas, saídas e ajustes'}
         acoes={
           pode('relatorios') && (
             <>
@@ -57,17 +57,17 @@ export default function Historico() {
       />
       <div className="cartao mb-4 grid gap-3 p-4 sm:grid-cols-2 lg:grid-cols-5">
         <div><label htmlFor="hi" className="rotulo">De</label><input id="hi" type="date" className="campo" value={inicio} onChange={(e) => { setInicio(e.target.value); setPagina(0); }} /></div>
-        <div><label htmlFor="hf" className="rotulo">Ate</label><input id="hf" type="date" className="campo" value={fim} onChange={(e) => { setFim(e.target.value); setPagina(0); }} /></div>
-        <div><label htmlFor="hc" className="rotulo">Pastilha (codigo)</label><input id="hc" className="campo" value={codigo} onChange={(e) => { setCodigo(e.target.value); setPagina(0); }} /></div>
+        <div><label htmlFor="hf" className="rotulo">Até</label><input id="hf" type="date" className="campo" value={fim} onChange={(e) => { setFim(e.target.value); setPagina(0); }} /></div>
+        <div><label htmlFor="hc" className="rotulo">Pastilha (código)</label><input id="hc" className="campo" value={codigo} onChange={(e) => { setCodigo(e.target.value); setPagina(0); }} /></div>
         <div>
           <label htmlFor="ht" className="rotulo">Tipo</label>
           <select id="ht" className="campo" value={tipo} onChange={(e) => { setTipo(e.target.value); setPagina(0); }}>
-            <option value="">Todos</option><option value="ENTRADA">Entrada</option><option value="SAIDA">Saida</option><option value="AJUSTE">Ajuste</option>
+            <option value="">Todos</option><option value="ENTRADA">Entrada</option><option value="SAIDA">Saída</option><option value="AJUSTE">Ajuste</option>
           </select>
         </div>
         {pode('usuarios') && (
           <div>
-            <label htmlFor="hu" className="rotulo">Usuario</label>
+            <label htmlFor="hu" className="rotulo">Usuário</label>
             <select id="hu" className="campo" value={usuarioId} onChange={(e) => { setUsuarioId(e.target.value); setPagina(0); }}>
               <option value="">Todos</option>
               {usuarios.dados?.map((u) => <option key={u.id} value={u.id}>{u.nome}</option>)}
@@ -77,10 +77,10 @@ export default function Historico() {
       </div>
       {erro && <Mensagem tipo="erro">{erro}</Mensagem>}
       <div className="cartao overflow-hidden">
-        {carregando && !dados ? <Carregando /> : dados && dados.conteudo.length === 0 ? <Vazio texto="Nenhuma movimentacao encontrada." /> : (
+        {carregando && !dados ? <Carregando /> : dados && dados.conteudo.length === 0 ? <Vazio texto="Nenhuma movimentação encontrada." /> : (
           <div className="overflow-x-auto">
             <table className="tabela">
-              <thead><tr><th>Data/hora</th><th>Tipo</th><th>Pastilha</th><th className="text-right">Qtd</th><th className="text-right">Saldo</th><th className="hidden md:table-cell">Usuario</th><th className="hidden lg:table-cell">Detalhes</th></tr></thead>
+              <thead><tr><th>Data/hora</th><th>Tipo</th><th>Pastilha</th><th className="text-right">Qtd</th><th className="text-right">Saldo</th><th className="hidden md:table-cell">Usuário</th><th className="hidden lg:table-cell">Detalhes</th></tr></thead>
               <tbody className="divide-y divide-slate-100">
                 {dados?.conteudo.map((m) => (
                   <tr key={m.id}>

@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/auth")
-@Tag(name = "Autenticacao")
+@Tag(name = "Autenticação")
 public class AuthController {
 
     private final AuthService authService;
@@ -37,13 +37,13 @@ public class AuthController {
         this.clock = clock;
     }
 
-    @Operation(summary = "Autentica o usuario e devolve o token JWT (RF01)")
+    @Operation(summary = "Autentica o usuário e devolve o token JWT (RF01)")
     @PostMapping("/login")
     public LoginResponse login(@Valid @RequestBody LoginRequest req, HttpServletRequest http) {
         return authService.login(req.email(), req.senha(), http.getRemoteAddr());
     }
 
-    @Operation(summary = "Dados do usuario autenticado")
+    @Operation(summary = "Dados do usuário autenticado")
     @GetMapping("/me")
     public UsuarioResponse me(@AuthenticationPrincipal UsuarioAutenticado principal) {
         return UsuarioResponse.de(usuarioLogado.carregar(principal), LocalDateTime.now(clock));

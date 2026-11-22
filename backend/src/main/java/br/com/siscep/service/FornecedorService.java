@@ -45,7 +45,7 @@ public class FornecedorService {
     public FornecedorResponse criar(FornecedorRequest req) {
         String cnpj = normalizarCnpj(req.cnpj());
         if (cnpj != null && fornecedorRepository.existsByCnpj(cnpj)) {
-            throw new ConflitoException("Ja existe um fornecedor com o CNPJ informado.");
+            throw new ConflitoException("Já existe um fornecedor com o CNPJ informado.");
         }
         Fornecedor f = new Fornecedor(req.razaoSocial().trim(), cnpj);
         preencher(f, req);
@@ -57,7 +57,7 @@ public class FornecedorService {
         Fornecedor f = obter(id);
         String cnpj = normalizarCnpj(req.cnpj());
         if (cnpj != null && fornecedorRepository.existsByCnpjAndIdNot(cnpj, id)) {
-            throw new ConflitoException("Ja existe um fornecedor com o CNPJ informado.");
+            throw new ConflitoException("Já existe um fornecedor com o CNPJ informado.");
         }
         f.setRazaoSocial(req.razaoSocial().trim());
         f.setCnpj(cnpj);
@@ -77,7 +77,7 @@ public class FornecedorService {
         Fornecedor f = obter(id);
         if (pastilhaRepository.existsByFornecedorPrincipalId(id) || movimentacaoRepository.existsByFornecedorId(id)) {
             throw new RegraNegocioException(
-                    "O fornecedor possui pastilhas ou movimentacoes vinculadas e nao pode ser excluido; inative-o.");
+                    "O fornecedor possui pastilhas ou movimentações vinculadas e não pode ser excluido; inative-o.");
         }
         fornecedorRepository.delete(f);
     }

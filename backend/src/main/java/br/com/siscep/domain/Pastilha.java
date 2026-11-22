@@ -78,7 +78,7 @@ public class Pastilha {
         validarQuantidade(quantidade);
         if (quantidade > saldoAtual) {
             throw new RegraNegocioException(
-                    "Saldo insuficiente para a pastilha " + codigo + ": disponivel " + saldoAtual
+                    "Saldo insuficiente para a pastilha " + codigo + ": disponível " + saldoAtual
                             + ", solicitado " + quantidade + ".");
         }
         saldoAtual -= quantidade;
@@ -87,11 +87,11 @@ public class Pastilha {
     /** RN07: ajuste substitui o saldo pela contagem fisica e devolve a diferenca. */
     public int ajustarPara(int contagemFisica) {
         if (contagemFisica < 0) {
-            throw new RegraNegocioException("A contagem fisica nao pode ser negativa.");
+            throw new RegraNegocioException("A contagem física não pode ser negativa.");
         }
         int diferenca = contagemFisica - saldoAtual;
         if (diferenca == 0) {
-            throw new RegraNegocioException("A contagem fisica e igual ao saldo atual; nao ha ajuste a registrar.");
+            throw new RegraNegocioException("A contagem física é igual ao saldo atual; não há ajuste a registrar.");
         }
         saldoAtual = contagemFisica;
         return diferenca;
@@ -99,7 +99,7 @@ public class Pastilha {
 
     public void definirEstoqueMinimo(int estoqueMinimo) {
         if (estoqueMinimo < 0) {
-            throw new RegraNegocioException("O estoque minimo deve ser maior ou igual a zero.");
+            throw new RegraNegocioException("O estoque mínimo deve ser maior ou igual a zero.");
         }
         this.estoqueMinimo = estoqueMinimo;
     }
@@ -118,7 +118,7 @@ public class Pastilha {
 
     private static void validarQuantidade(int quantidade) {
         if (quantidade <= 0) {
-            throw new RegraNegocioException("A quantidade deve ser um numero inteiro maior que zero.");
+            throw new RegraNegocioException("A quantidade deve ser um número inteiro maior que zero.");
         }
     }
 

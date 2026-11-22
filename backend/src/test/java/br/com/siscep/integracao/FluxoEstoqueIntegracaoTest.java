@@ -128,7 +128,7 @@ class FluxoEstoqueIntegracaoTest extends IntegracaoBase {
                         .content(json.writeValueAsString(Map.of("codigo", "NOVO-" + id, "descricao", "x",
                                 "unidadeMedida", "UN", "estoqueMinimo", 1))))
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(jsonPath("$.mensagem", containsString("codigo")));
+                .andExpect(jsonPath("$.mensagem", containsString("código")));
         mvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete("/api/pastilhas/" + id)
                         .header("Authorization", almox))
                 .andExpect(status().isUnprocessableEntity());
@@ -192,7 +192,7 @@ class FluxoEstoqueIntegracaoTest extends IntegracaoBase {
         String cod = "IMP-" + UUID.randomUUID().toString().substring(0, 6);
         String csv = "codigo;descricao;especificacao;unidade;fabricante;estoque_minimo;saldo_inicial\n"
                 + cod + ";Pastilha importada;ISO;UN;Sandvik;5;12\n"
-                + ";sem codigo;;;;1;1\n";
+                + ";sem código;;;;1;1\n";
         mvc.perform(multipart("/api/pastilhas/importacao")
                         .file(new MockMultipartFile("arquivo", "carga.csv", "text/csv",
                                 csv.getBytes(StandardCharsets.UTF_8)))

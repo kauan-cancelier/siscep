@@ -6,7 +6,7 @@ import { Rotas } from '../App';
 import type { Perfil, Usuario } from '../api/tipos';
 
 export function usuarioFake(perfil: Perfil): Usuario {
-  return { id: 1, nome: `Usuario ${perfil}`, email: 'u@dda.com.br', perfil, ativo: true, bloqueado: false, ultimoAcesso: null, criadoEm: '2026-10-01T10:00:00' };
+  return { id: 1, nome: `Usuário ${perfil}`, email: 'u@dda.com.br', perfil, ativo: true, bloqueado: false, ultimoAcesso: null, criadoEm: '2026-10-01T10:00:00' };
 }
 
 type Rota = (url: string, init?: RequestInit) => { status?: number; corpo?: unknown } | undefined;

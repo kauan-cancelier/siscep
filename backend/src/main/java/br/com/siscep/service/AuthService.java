@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 @Service
 public class AuthService {
 
-    static final String CREDENCIAIS_INVALIDAS = "E-mail ou senha invalidos.";
+    static final String CREDENCIAIS_INVALIDAS = "E-mail ou senha inválidos.";
 
     private final UsuarioRepository usuarioRepository;
     private final RegistroAcessoRepository registroAcessoRepository;
@@ -43,12 +43,12 @@ public class AuthService {
         LocalDateTime agora = LocalDateTime.now(clock);
         Usuario usuario = usuarioRepository.findByEmailIgnoreCase(email.trim()).orElse(null);
         if (usuario == null) {
-            registrar(email, false, "usuario inexistente", ip, agora);
+            registrar(email, false, "usuário inexistente", ip, agora);
             throw new AutenticacaoException(CREDENCIAIS_INVALIDAS);
         }
         if (!usuario.isAtivo()) {
-            registrar(email, false, "usuario inativo", ip, agora);
-            throw new AutenticacaoException("Usuario inativo. Procure o administrador do sistema.");
+            registrar(email, false, "usuário inativo", ip, agora);
+            throw new AutenticacaoException("Usuário inativo. Procure o administrador do sistema.");
         }
         if (usuario.estaBloqueado(agora)) {
             registrar(email, false, "conta bloqueada", ip, agora);
@@ -59,7 +59,7 @@ public class AuthService {
             usuario.registrarFalhaLogin(agora);
             registrar(email, false, "senha incorreta", ip, agora);
             if (usuario.estaBloqueado(agora)) {
-                throw new AutenticacaoException("Tres tentativas invalidas. Conta bloqueada por "
+                throw new AutenticacaoException("Tres tentativas inválidas. Conta bloqueada por "
                         + Usuario.MINUTOS_BLOQUEIO + " minutos.");
             }
             throw new AutenticacaoException(CREDENCIAIS_INVALIDAS);

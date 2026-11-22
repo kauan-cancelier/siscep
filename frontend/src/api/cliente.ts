@@ -49,7 +49,7 @@ async function requisicao(metodo: string, url: string, corpo?: unknown, params?:
   try {
     resp = await fetch(`${BASE}${url}${montarQuery(params)}`, { method: metodo, headers, body });
   } catch {
-    throw new ErroApi(0, 'Nao foi possivel conectar ao servidor. Verifique sua conexao.');
+    throw new ErroApi(0, 'Não foi possível conectar ao servidor. Verifique sua conexão.');
   }
   if (!resp.ok) {
     let mensagem = 'Ocorreu um erro inesperado. Tente novamente.';

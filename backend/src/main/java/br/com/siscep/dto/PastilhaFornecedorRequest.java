@@ -8,6 +8,6 @@ import java.math.BigDecimal;
 
 public record PastilhaFornecedorRequest(
         @NotNull(message = "informe o fornecedor") Long fornecedorId,
-        @DecimalMin(value = "0.0", message = "o preco nao pode ser negativo") BigDecimal precoReferencia,
-        @Min(value = 0, message = "o prazo nao pode ser negativo") Integer prazoEntregaDias) {
+        @DecimalMin(value = "0.0", message = "o preço não pode ser negativo") BigDecimal precoReferencia,
+        @Min(value = 0, message = "o prazo não pode ser negativo") Integer prazoEntregaDias) {
 }

@@ -96,7 +96,7 @@ public class PastilhaController {
         return service.atualizar(id, req, usuarioLogado.carregar(principal));
     }
 
-    @Operation(summary = "Define o estoque minimo (RF06 / RN09)")
+    @Operation(summary = "Define o estoque mínimo (RF06 / RN09)")
     @PatchMapping("/{id}/estoque-minimo")
     @PreAuthorize(Perfis.CADASTROS)
     public PastilhaResponse estoqueMinimo(@PathVariable Long id, @Valid @RequestBody EstoqueMinimoRequest req,

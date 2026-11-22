@@ -11,7 +11,7 @@ describe('matriz de permissoes', () => {
     }
   });
 
-  it('operador registra saidas mas nao acessa relatorios nem cadastros', () => {
+  it('operador registra saídas mas não acessa relatórios nem cadastros', () => {
     expect(pode('OPERADOR', 'saida')).toBe(true);
     expect(pode('OPERADOR', 'relatorios')).toBe(false);
     expect(pode('OPERADOR', 'cadastros')).toBe(false);
@@ -24,13 +24,13 @@ describe('matriz de permissoes', () => {
     expect(pode('GESTOR', 'cadastros')).toBe(false);
   });
 
-  it('somente o administrador gerencia usuarios', () => {
+  it('somente o administrador gerencia usuários', () => {
     expect(pode('ADMINISTRADOR', 'usuarios')).toBe(true);
     expect(pode('ALMOXARIFE', 'usuarios')).toBe(false);
     expect(pode(undefined, 'estoque')).toBe(false);
   });
 
-  it('define a pagina inicial por perfil', () => {
+  it('define a página inicial por perfil', () => {
     expect(paginaInicial('GESTOR')).toBe('/dashboard');
     expect(paginaInicial('OPERADOR')).toBe('/movimentacoes/saida');
   });

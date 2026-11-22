@@ -82,7 +82,7 @@ export default function Pastilhas() {
     <>
       <Titulo
         titulo="Pastilhas"
-        descricao="Cadastro de pastilhas e estoque minimo"
+        descricao="Cadastro de pastilhas e estoque mínimo"
         acoes={
           <>
             <label className="btn-secundario cursor-pointer">
@@ -104,13 +104,13 @@ export default function Pastilhas() {
       {(erro || aviso) && <div className="mb-3"><Mensagem tipo="erro">{erro ?? aviso}</Mensagem></div>}
       <div className="mb-4 max-w-md">
         <label htmlFor="busca" className="sr-only">Buscar</label>
-        <input id="busca" className="campo" placeholder="Buscar por codigo ou descricao" value={termo} onChange={(e) => { setTermo(e.target.value); setPagina(0); }} />
+        <input id="busca" className="campo" placeholder="Buscar por código ou descrição" value={termo} onChange={(e) => { setTermo(e.target.value); setPagina(0); }} />
       </div>
       <div className="cartao overflow-hidden">
         {carregando && !dados ? <Carregando /> : dados?.conteudo.length === 0 ? <Vazio texto="Nenhuma pastilha cadastrada." /> : (
           <div className="overflow-x-auto">
             <table className="tabela">
-              <thead><tr><th>Codigo</th><th>Descricao</th><th className="hidden md:table-cell">Fabricante</th><th className="text-right">Saldo</th><th className="text-right">Minimo</th><th>Situacao</th><th>Status</th><th className="text-right">Acoes</th></tr></thead>
+              <thead><tr><th>Código</th><th>Descrição</th><th className="hidden md:table-cell">Fabricante</th><th className="text-right">Saldo</th><th className="text-right">Mínimo</th><th>Situação</th><th>Status</th><th className="text-right">Ações</th></tr></thead>
               <tbody className="divide-y divide-slate-100">
                 {dados?.conteudo.map((p) => (
                   <tr key={p.id}>
@@ -119,7 +119,7 @@ export default function Pastilhas() {
                     <td><SituacaoBadge situacao={p.situacao} /></td><td><StatusBadge ativo={p.ativo} /></td>
                     <td className="space-x-3 whitespace-nowrap text-right">
                       <button type="button" className="btn-link" onClick={() => abrir(p)}>Editar</button>
-                      <button type="button" className="btn-link" onClick={() => api.get<HistoricoMinimo[]>(`/api/pastilhas/${p.id}/estoque-minimo/historico`).then((itens) => setHistorico({ p, itens }))}>Hist. minimo</button>
+                      <button type="button" className="btn-link" onClick={() => api.get<HistoricoMinimo[]>(`/api/pastilhas/${p.id}/estoque-minimo/historico`).then((itens) => setHistorico({ p, itens }))}>Hist. mínimo</button>
                       <button type="button" className="btn-link" onClick={() => acao(() => api.patch(`/api/pastilhas/${p.id}/status`, { ativo: !p.ativo }))}>{p.ativo ? 'Inativar' : 'Ativar'}</button>
                       <button type="button" className="btn-link text-red-600" onClick={() => confirm(`Excluir ${p.codigo}?`) && acao(() => api.delete(`/api/pastilhas/${p.id}`))}>Excluir</button>
                     </td>
@@ -135,31 +135,31 @@ export default function Pastilhas() {
       <Modal aberto={aberto} titulo={editando ? `Editar ${editando.codigo}` : 'Nova pastilha'} aoFechar={() => setAberto(false)} largura="max-w-2xl">
         <form onSubmit={salvar} className="grid gap-4 sm:grid-cols-2">
           {erroForm && <div className="sm:col-span-2"><Mensagem tipo="erro">{erroForm}</Mensagem></div>}
-          <Campo rotulo="Codigo (unico)" id="pcod"><input id="pcod" className="campo uppercase" maxLength={40} value={form.codigo} onChange={set('codigo')} required /></Campo>
+          <Campo rotulo="Código (único)" id="pcod"><input id="pcod" className="campo uppercase" maxLength={40} value={form.codigo} onChange={set('codigo')} required /></Campo>
           <Campo rotulo="Unidade de medida" id="pun"><input id="pun" className="campo uppercase" maxLength={10} value={form.unidadeMedida} onChange={set('unidadeMedida')} required /></Campo>
-          <div className="sm:col-span-2"><Campo rotulo="Descricao" id="pdesc"><input id="pdesc" className="campo" maxLength={160} value={form.descricao} onChange={set('descricao')} required /></Campo></div>
-          <div className="sm:col-span-2"><Campo rotulo="Especificacao tecnica (geometria, classe, cobertura)" id="pesp"><textarea id="pesp" className="campo" rows={2} maxLength={500} value={form.especificacao} onChange={set('especificacao')} /></Campo></div>
+          <div className="sm:col-span-2"><Campo rotulo="Descrição" id="pdesc"><input id="pdesc" className="campo" maxLength={160} value={form.descricao} onChange={set('descricao')} required /></Campo></div>
+          <div className="sm:col-span-2"><Campo rotulo="Especificação técnica (geometria, classe, cobertura)" id="pesp"><textarea id="pesp" className="campo" rows={2} maxLength={500} value={form.especificacao} onChange={set('especificacao')} /></Campo></div>
           <Campo rotulo="Fabricante" id="pfab">
             <select id="pfab" className="campo" value={form.fabricanteId} onChange={set('fabricanteId')}>
-              <option value="">Nao informado</option>
+              <option value="">Não informado</option>
               {fabricantes.dados?.map((f) => <option key={f.id} value={f.id}>{f.nome}</option>)}
             </select>
           </Campo>
           <Campo rotulo="Fornecedor principal" id="pforn">
             <select id="pforn" className="campo" value={form.fornecedorPrincipalId} onChange={set('fornecedorPrincipalId')}>
-              <option value="">Nao informado</option>
+              <option value="">Não informado</option>
               {fornecedores.dados?.map((f) => <option key={f.id} value={f.id}>{f.razaoSocial}</option>)}
             </select>
           </Campo>
-          <Campo rotulo="Estoque minimo" id="pmin"><input id="pmin" type="number" min={0} step={1} className="campo" value={form.estoqueMinimo} onChange={set('estoqueMinimo')} required /></Campo>
+          <Campo rotulo="Estoque mínimo" id="pmin"><input id="pmin" type="number" min={0} step={1} className="campo" value={form.estoqueMinimo} onChange={set('estoqueMinimo')} required /></Campo>
           <div className="flex items-end justify-end gap-2"><button type="button" className="btn-secundario" onClick={() => setAberto(false)}>Cancelar</button><button type="submit" className="btn-primario">Salvar</button></div>
         </form>
       </Modal>
 
-      <Modal aberto={!!historico} titulo={`Historico do estoque minimo - ${historico?.p.codigo ?? ''}`} aoFechar={() => setHistorico(null)}>
-        {historico?.itens.length === 0 ? <Vazio texto="O estoque minimo ainda nao foi alterado." /> : (
+      <Modal aberto={!!historico} titulo={`Histórico do estoque mínimo - ${historico?.p.codigo ?? ''}`} aoFechar={() => setHistorico(null)}>
+        {historico?.itens.length === 0 ? <Vazio texto="O estoque mínimo ainda não foi alterado." /> : (
           <table className="tabela">
-            <thead><tr><th>Data</th><th>De</th><th>Para</th><th>Usuario</th></tr></thead>
+            <thead><tr><th>Data</th><th>De</th><th>Para</th><th>Usuário</th></tr></thead>
             <tbody>{historico?.itens.map((h) => <tr key={h.id}><td>{dataHora(h.alteradoEm)}</td><td>{h.valorAnterior}</td><td>{h.valorNovo}</td><td>{h.usuarioNome}</td></tr>)}</tbody>
           </table>
         )}

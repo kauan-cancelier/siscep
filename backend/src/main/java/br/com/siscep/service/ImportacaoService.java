@@ -80,11 +80,11 @@ public class ImportacaoService {
                 }
                 String codigo = PastilhaService.normalizarCodigo(c[0]);
                 if (codigo.isEmpty() || c[1].isBlank()) {
-                    erros.add("Linha " + numero + ": codigo e descricao sao obrigatorios.");
+                    erros.add("Linha " + numero + ": código e descrição são obrigatórios.");
                     continue;
                 }
                 if (pastilhaRepository.existsByCodigoIgnoreCase(codigo)) {
-                    erros.add("Linha " + numero + ": a pastilha " + codigo + " ja esta cadastrada.");
+                    erros.add("Linha " + numero + ": a pastilha " + codigo + " já está cadastrada.");
                     continue;
                 }
                 int minimo;
@@ -93,11 +93,11 @@ public class ImportacaoService {
                     minimo = Integer.parseInt(c[5].trim());
                     saldo = c[6].isBlank() ? 0 : Integer.parseInt(c[6].trim());
                 } catch (NumberFormatException e) {
-                    erros.add("Linha " + numero + ": estoque minimo e saldo devem ser numeros inteiros.");
+                    erros.add("Linha " + numero + ": estoque mínimo e saldo devem ser números inteiros.");
                     continue;
                 }
                 if (minimo < 0 || saldo < 0) {
-                    erros.add("Linha " + numero + ": estoque minimo e saldo nao podem ser negativos.");
+                    erros.add("Linha " + numero + ": estoque mínimo e saldo não podem ser negativos.");
                     continue;
                 }
                 Pastilha p = new Pastilha(codigo, c[1].trim(), minimo);
@@ -121,7 +121,7 @@ public class ImportacaoService {
                 alertaService.avaliar(p);
             }
         } catch (IOException e) {
-            throw new RegraNegocioException("Nao foi possivel ler o arquivo enviado.");
+            throw new RegraNegocioException("Não foi possível ler o arquivo enviado.");
         }
         return new ImportacaoResultado(processadas, criadas, saldos, erros);
     }

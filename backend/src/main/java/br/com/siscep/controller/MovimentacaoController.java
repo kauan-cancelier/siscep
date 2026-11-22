@@ -34,7 +34,7 @@ import java.time.LocalTime;
 
 @RestController
 @RequestMapping("/api/movimentacoes")
-@Tag(name = "Movimentacoes")
+@Tag(name = "Movimentações")
 public class MovimentacaoController {
 
     private final EstoqueService service;
@@ -54,7 +54,7 @@ public class MovimentacaoController {
         return service.registrarEntrada(req, usuarioLogado.carregar(principal));
     }
 
-    @Operation(summary = "Registra saida para producao (RF08)")
+    @Operation(summary = "Registra saída para produção (RF08)")
     @PostMapping("/saidas")
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize(Perfis.SAIDA)
@@ -63,7 +63,7 @@ public class MovimentacaoController {
         return service.registrarSaida(req, usuarioLogado.carregar(principal));
     }
 
-    @Operation(summary = "Registra ajuste de inventario com justificativa (RF09)")
+    @Operation(summary = "Registra ajuste de inventário com justificativa (RF09)")
     @PostMapping("/ajustes")
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize(Perfis.ALMOXARIFE)
@@ -72,7 +72,7 @@ public class MovimentacaoController {
         return service.registrarAjuste(req, usuarioLogado.carregar(principal));
     }
 
-    @Operation(summary = "Historico de movimentacoes; o operador ve apenas as proprias (RF14)")
+    @Operation(summary = "Histórico de movimentações; o operador vê apenas as próprias (RF14)")
     @GetMapping
     public PaginaResponse<MovimentacaoResponse> historico(
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate inicio,

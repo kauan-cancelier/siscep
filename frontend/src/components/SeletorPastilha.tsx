@@ -51,7 +51,7 @@ export default function SeletorPastilha({
       <input
         id={id}
         className="campo"
-        placeholder="Digite o codigo ou a descricao"
+        placeholder="Digite o código ou a descrição"
         value={termo}
         autoComplete="off"
         role="combobox"

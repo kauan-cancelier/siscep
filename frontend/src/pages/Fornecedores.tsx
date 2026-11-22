@@ -59,7 +59,7 @@ export default function Fornecedores() {
       <div className="cartao overflow-x-auto">
         {carregando ? <Carregando /> : dados?.length === 0 ? <Vazio texto="Nenhum fornecedor cadastrado." /> : (
           <table className="tabela">
-            <thead><tr><th>Razao social</th><th className="hidden md:table-cell">CNPJ</th><th className="hidden lg:table-cell">Contato</th><th className="hidden sm:table-cell">Prazo</th><th>Status</th><th className="text-right">Acoes</th></tr></thead>
+            <thead><tr><th>Razão social</th><th className="hidden md:table-cell">CNPJ</th><th className="hidden lg:table-cell">Contato</th><th className="hidden sm:table-cell">Prazo</th><th>Status</th><th className="text-right">Ações</th></tr></thead>
             <tbody className="divide-y divide-slate-100">
               {dados?.map((f) => (
                 <tr key={f.id}>
@@ -81,9 +81,9 @@ export default function Fornecedores() {
       <Modal aberto={aberto} titulo={editando ? 'Editar fornecedor' : 'Novo fornecedor'} aoFechar={() => setAberto(false)}>
         <form onSubmit={salvar} className="grid gap-4 sm:grid-cols-2">
           {erroForm && <div className="sm:col-span-2"><Mensagem tipo="erro">{erroForm}</Mensagem></div>}
-          <div className="sm:col-span-2">{campo('razaoSocial', 'Razao social', { required: true, maxLength: 160 })}</div>
+          <div className="sm:col-span-2">{campo('razaoSocial', 'Razão social', { required: true, maxLength: 160 })}</div>
           {campo('cnpj', 'CNPJ', { placeholder: '00.000.000/0000-00', maxLength: 18 })}
-          {campo('prazoMedioEntregaDias', 'Prazo medio de entrega (dias)', { type: 'number', min: 0 })}
+          {campo('prazoMedioEntregaDias', 'Prazo médio de entrega (dias)', { type: 'number', min: 0 })}
           {campo('contato', 'Contato', { maxLength: 120 })}
           {campo('telefone', 'Telefone', { maxLength: 20 })}
           <div className="sm:col-span-2">{campo('email', 'E-mail', { type: 'email', maxLength: 160 })}</div>

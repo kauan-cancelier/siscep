@@ -115,7 +115,7 @@ class EstoqueServiceTest {
 
         assertThatThrownBy(() -> service.registrarSaida(new SaidaRequest(10L, 3, "Torno 2", null), almoxarife))
                 .isInstanceOf(RegraNegocioException.class)
-                .hasMessageContaining("disponivel 2");
+                .hasMessageContaining("disponível 2");
         assertThat(p.getSaldoAtual()).isEqualTo(2);
         verify(movimentacaoRepository, never()).save(any());
         verify(pastilhaRepository, never()).saveAndFlush(any());
@@ -127,7 +127,7 @@ class EstoqueServiceTest {
         salvarDevolveArgumento();
         ArgumentCaptor<Movimentacao> captor = ArgumentCaptor.forClass(Movimentacao.class);
 
-        service.registrarAjuste(new AjusteRequest(10L, 6, "Inventario mensal"), almoxarife);
+        service.registrarAjuste(new AjusteRequest(10L, 6, "Inventário mensal"), almoxarife);
 
         verify(movimentacaoRepository).save(captor.capture());
         Movimentacao m = captor.getValue();
@@ -135,7 +135,7 @@ class EstoqueServiceTest {
         assertThat(m.getQuantidade()).isEqualTo(4);
         assertThat(m.getSaldoAnterior()).isEqualTo(10);
         assertThat(m.getSaldoResultante()).isEqualTo(6);
-        assertThat(m.getJustificativa()).isEqualTo("Inventario mensal");
+        assertThat(m.getJustificativa()).isEqualTo("Inventário mensal");
         assertThat(p.getSaldoAtual()).isEqualTo(6);
     }
 

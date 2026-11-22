@@ -41,7 +41,7 @@ public class FabricanteService {
     public FabricanteResponse criar(FabricanteRequest req) {
         String nome = req.nome().trim();
         if (fabricanteRepository.existsByNomeIgnoreCase(nome)) {
-            throw new ConflitoException("Ja existe um fabricante com o nome " + nome + ".");
+            throw new ConflitoException("Já existe um fabricante com o nome " + nome + ".");
         }
         return FabricanteResponse.de(fabricanteRepository.save(new Fabricante(nome, req.pais(), req.site())));
     }
@@ -51,7 +51,7 @@ public class FabricanteService {
         Fabricante f = obter(id);
         String nome = req.nome().trim();
         if (fabricanteRepository.existsByNomeIgnoreCaseAndIdNot(nome, id)) {
-            throw new ConflitoException("Ja existe um fabricante com o nome " + nome + ".");
+            throw new ConflitoException("Já existe um fabricante com o nome " + nome + ".");
         }
         f.setNome(nome);
         f.setPais(req.pais());
@@ -71,7 +71,7 @@ public class FabricanteService {
         Fabricante f = obter(id);
         if (pastilhaRepository.existsByFabricanteId(id)) {
             throw new RegraNegocioException(
-                    "O fabricante possui pastilhas vinculadas e nao pode ser excluido; inative-o.");
+                    "O fabricante possui pastilhas vinculadas e não pode ser excluido; inative-o.");
         }
         fabricanteRepository.delete(f);
     }

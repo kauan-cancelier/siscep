@@ -10,8 +10,8 @@ const pastilha: Pastilha = {
   estoqueMinimo: 5, saldoAtual: 3, situacao: 'CRITICO', ativo: true,
 };
 
-describe('Registrar saida', () => {
-  it('impede saida acima do saldo e registra saida valida', async () => {
+describe('Registrar saída', () => {
+  it('impede saída acima do saldo e registra saída válida', async () => {
     localStorage.setItem('siscep.token', 't');
     const fetch = mockFetch((url, init) => {
       if (url.includes('/auth/me')) return { corpo: usuarioFake('OPERADOR') };
@@ -24,8 +24,8 @@ describe('Registrar saida', () => {
     await userEvent.click(await screen.findByLabelText('Pastilha'));
     await userEvent.click(await screen.findByRole('button', { name: /CNMG120408/ }));
     await userEvent.type(screen.getByLabelText('Quantidade'), '4');
-    expect(screen.getByText(/Saldo insuficiente: disponivel 3/)).toBeInTheDocument();
-    const confirmar = screen.getByRole('button', { name: 'Confirmar saida' });
+    expect(screen.getByText(/Saldo insuficiente: disponível 3/)).toBeInTheDocument();
+    const confirmar = screen.getByRole('button', { name: 'Confirmar saída' });
     expect(confirmar).toBeDisabled();
 
     await userEvent.clear(screen.getByLabelText('Quantidade'));

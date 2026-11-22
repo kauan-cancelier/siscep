@@ -32,7 +32,7 @@ export default function Estoque() {
     <>
       <Titulo
         titulo="Estoque atual"
-        descricao="Saldo de cada pastilha ativa; itens criticos e zerados sao destacados"
+        descricao="Saldo de cada pastilha ativa; itens críticos e zerados são destacados"
         acoes={
           pode('relatorios') && (
             <>
@@ -48,7 +48,7 @@ export default function Estoque() {
       />
       <div className="cartao mb-4 grid gap-3 p-4 sm:grid-cols-2 lg:grid-cols-5">
         <div className="lg:col-span-2">
-          <label htmlFor="termo" className="rotulo">Codigo, descricao ou especificacao</label>
+          <label htmlFor="termo" className="rotulo">Código, descrição ou especificação</label>
           <input id="termo" className="campo" value={termo} onChange={(e) => filtro(setTermo)(e.target.value)} placeholder="Ex.: CNMG" />
         </div>
         <div>
@@ -66,11 +66,11 @@ export default function Estoque() {
           </select>
         </div>
         <div>
-          <label htmlFor="sit" className="rotulo">Situacao</label>
+          <label htmlFor="sit" className="rotulo">Situação</label>
           <select id="sit" className="campo" value={situacao} onChange={(e) => filtro((v) => setSituacao(v as Situacao | ''))(e.target.value)}>
             <option value="">Todas</option>
             <option value="NORMAL">Normal</option>
-            <option value="CRITICO">Critico</option>
+            <option value="CRITICO">Crítico</option>
             <option value="ZERADO">Zerado</option>
           </select>
         </div>
@@ -80,8 +80,8 @@ export default function Estoque() {
         <div className="flex justify-end border-b border-slate-200 px-3 py-2">
           <label htmlFor="ordem" className="sr-only">Ordenar por</label>
           <select id="ordem" className="campo w-auto py-1" value={ordem} onChange={(e) => setOrdem(e.target.value)}>
-            <option value="codigo,asc">Codigo (A-Z)</option>
-            <option value="descricao,asc">Descricao (A-Z)</option>
+            <option value="codigo,asc">Código (A-Z)</option>
+            <option value="descricao,asc">Descrição (A-Z)</option>
             <option value="saldoAtual,asc">Menor saldo</option>
             <option value="saldoAtual,desc">Maior saldo</option>
           </select>
@@ -94,7 +94,7 @@ export default function Estoque() {
           <div className="overflow-x-auto">
             <table className="tabela">
               <thead>
-                <tr><th>Codigo</th><th>Descricao</th><th className="hidden md:table-cell">Fabricante</th><th className="hidden lg:table-cell">Fornecedor</th><th className="text-right">Saldo</th><th className="text-right">Minimo</th><th>Situacao</th></tr>
+                <tr><th>Código</th><th>Descrição</th><th className="hidden md:table-cell">Fabricante</th><th className="hidden lg:table-cell">Fornecedor</th><th className="text-right">Saldo</th><th className="text-right">Mínimo</th><th>Situação</th></tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {dados?.conteudo.map((p) => (

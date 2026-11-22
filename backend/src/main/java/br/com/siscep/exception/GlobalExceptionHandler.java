@@ -45,19 +45,19 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ErroResposta> acessoNegado(AccessDeniedException ex) {
-        return resposta(HttpStatus.FORBIDDEN, "Seu perfil nao tem permissao para esta operacao.");
+        return resposta(HttpStatus.FORBIDDEN, "Seu perfil não tem permissão para esta operação.");
     }
 
     @ExceptionHandler(OptimisticLockingFailureException.class)
     public ResponseEntity<ErroResposta> concorrencia(OptimisticLockingFailureException ex) {
         return resposta(HttpStatus.CONFLICT,
-                "O registro foi alterado por outro usuario ao mesmo tempo. Atualize a tela e tente novamente.");
+                "O registro foi alterado por outro usuário ao mesmo tempo. Atualize a tela e tente novamente.");
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErroResposta> integridade(DataIntegrityViolationException ex) {
         log.warn("Violacao de integridade: {}", ex.getMostSpecificCause().getMessage());
-        return resposta(HttpStatus.CONFLICT, "A operacao viola uma restricao de integridade dos dados.");
+        return resposta(HttpStatus.CONFLICT, "A operação viola uma restricao de integridade dos dados.");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -66,7 +66,7 @@ public class GlobalExceptionHandler {
                 .map(e -> e.getField() + ": " + e.getDefaultMessage())
                 .toList();
         return ResponseEntity.badRequest()
-                .body(ErroResposta.de(400, "Dados invalidos. Verifique os campos informados.", detalhes));
+                .body(ErroResposta.de(400, "Dados inválidos. Verifique os campos informados.", detalhes));
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
@@ -75,17 +75,17 @@ public class GlobalExceptionHandler {
                 .map(v -> v.getPropertyPath() + ": " + v.getMessage())
                 .toList();
         return ResponseEntity.badRequest()
-                .body(ErroResposta.de(400, "Parametros invalidos.", detalhes));
+                .body(ErroResposta.de(400, "Parametros inválidos.", detalhes));
     }
 
     @ExceptionHandler({HttpMessageNotReadableException.class, MethodArgumentTypeMismatchException.class})
     public ResponseEntity<ErroResposta> requisicaoInvalida(Exception ex) {
-        return resposta(HttpStatus.BAD_REQUEST, "Requisicao invalida. Verifique o formato dos dados enviados.");
+        return resposta(HttpStatus.BAD_REQUEST, "Requisicao inválida. Verifique o formato dos dados enviados.");
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<ErroResposta> rotaInexistente(NoResourceFoundException ex) {
-        return resposta(HttpStatus.NOT_FOUND, "Recurso nao encontrado.");
+        return resposta(HttpStatus.NOT_FOUND, "Recurso não encontrado.");
     }
 
     @ExceptionHandler(Exception.class)

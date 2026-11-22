@@ -18,7 +18,7 @@ final class Fixtures {
     }
 
     static Usuario usuario(long id, PerfilUsuario perfil) {
-        Usuario u = new Usuario("Usuario " + id, "u" + id + "@dda.com.br", "hash", perfil);
+        Usuario u = new Usuario("Usuário " + id, "u" + id + "@dda.com.br", "hash", perfil);
         ReflectionTestUtils.setField(u, "id", id);
         return u;
     }

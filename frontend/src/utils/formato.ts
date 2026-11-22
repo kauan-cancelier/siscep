@@ -7,9 +7,9 @@ export const NOMES_PERFIL: Record<Perfil, string> = {
   GESTOR: 'Gestor',
 };
 
-export const NOMES_SITUACAO: Record<Situacao, string> = { NORMAL: 'Normal', CRITICO: 'Critico', ZERADO: 'Zerado' };
+export const NOMES_SITUACAO: Record<Situacao, string> = { NORMAL: 'Normal', CRITICO: 'Crítico', ZERADO: 'Zerado' };
 
-export const NOMES_TIPO: Record<TipoMovimentacao, string> = { ENTRADA: 'Entrada', SAIDA: 'Saida', AJUSTE: 'Ajuste' };
+export const NOMES_TIPO: Record<TipoMovimentacao, string> = { ENTRADA: 'Entrada', SAIDA: 'Saída', AJUSTE: 'Ajuste' };
 
 export function dataHora(iso: string | null | undefined): string {
   if (!iso) return '-';

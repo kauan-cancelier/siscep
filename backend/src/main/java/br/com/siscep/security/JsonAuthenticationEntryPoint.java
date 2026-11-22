@@ -26,13 +26,13 @@ public class JsonAuthenticationEntryPoint implements AuthenticationEntryPoint, A
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException authException) throws IOException {
-        escrever(response, 401, "Autenticacao necessaria. Faca login para continuar.");
+        escrever(response, 401, "Autenticação necessária. Faça login para continuar.");
     }
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response,
                        AccessDeniedException accessDeniedException) throws IOException {
-        escrever(response, 403, "Seu perfil nao tem permissao para esta operacao.");
+        escrever(response, 403, "Seu perfil não tem permissão para esta operação.");
     }
 
     private void escrever(HttpServletResponse response, int status, String mensagem) throws IOException {

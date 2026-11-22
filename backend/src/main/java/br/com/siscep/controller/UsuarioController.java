@@ -33,7 +33,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/usuarios")
 @PreAuthorize(Perfis.ADMIN)
-@Tag(name = "Usuarios")
+@Tag(name = "Usuários")
 public class UsuarioController {
 
     private final UsuarioService service;
@@ -42,7 +42,7 @@ public class UsuarioController {
         this.service = service;
     }
 
-    @Operation(summary = "Lista os usuarios (RF02)")
+    @Operation(summary = "Lista os usuários (RF02)")
     @GetMapping
     public List<UsuarioResponse> listar() {
         return service.listar();
@@ -65,21 +65,21 @@ public class UsuarioController {
         return service.atualizar(id, req, principal.id());
     }
 
-    @Operation(summary = "Ativa ou inativa o usuario; o acesso e revogado imediatamente")
+    @Operation(summary = "Ativa ou inativa o usuário; o acesso é revogado imediatamente")
     @PatchMapping("/{id}/status")
     public UsuarioResponse status(@PathVariable Long id, @Valid @RequestBody StatusRequest req,
                                   @AuthenticationPrincipal UsuarioAutenticado principal) {
         return service.alterarStatus(id, req.ativo(), principal.id());
     }
 
-    @Operation(summary = "Redefine a senha de um usuario (RF21)")
+    @Operation(summary = "Redefine a senha de um usuário (RF21)")
     @PostMapping("/{id}/redefinir-senha")
     public ResponseEntity<Void> redefinirSenha(@PathVariable Long id, @Valid @RequestBody RedefinirSenhaRequest req) {
         service.redefinirSenha(id, req.novaSenha());
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "Remove o bloqueio por tentativas invalidas (RN15)")
+    @Operation(summary = "Remove o bloqueio por tentativas inválidas (RN15)")
     @PostMapping("/{id}/desbloquear")
     public UsuarioResponse desbloquear(@PathVariable Long id) {
         return service.desbloquear(id);
