@@ -107,7 +107,7 @@ Em *Pastilhas → Importar planilha (CSV)*, envie um CSV separado por `;` com o 
 codigo;descricao;especificacao;unidade;fabricante;estoque_minimo;saldo_inicial
 ```
 
-Fabricantes inexistentes são criados e o saldo inicial é lançado como ajuste de inventário. Linhas com erro são
+Exemplo: [`docs/exemplo-importacao.csv`](docs/exemplo-importacao.csv). Fabricantes inexistentes são criados e o saldo inicial é lançado como ajuste de inventário. Linhas com erro são
 reportadas sem interromper as demais (limite de 5.000 linhas).
 
 ## API
