@@ -85,7 +85,7 @@ export default function Dashboard() {
           </div>
           <section className="cartao" aria-labelledby="g3">
             <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3">
-              <h2 id="g3" className="font-semibold">Itens que precisam de atencao ({dados.alertasAbertos} alertas)</h2>
+              <h2 id="g3" className="font-semibold">Itens que precisam de atenção ({dados.alertasAbertos} alertas)</h2>
               {pode('relatorios') && <Link to="/relatorios" className="btn-link">Relatório de reposição</Link>}
             </div>
             {dados.itensEmAlerta.length === 0 ? (

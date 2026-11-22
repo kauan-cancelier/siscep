@@ -3,7 +3,7 @@ import { api } from '../api/cliente';
 import type { Pagina, Pastilha } from '../api/tipos';
 import { SituacaoBadge } from './Ui';
 
-/** Busca de pastilhas ativas por codigo ou descricao (itens inativos nao aparecem - RN11). */
+/** Busca de pastilhas ativas por código ou descrição (itens inativos não aparecem - RN11). */
 export default function SeletorPastilha({
   valor,
   aoSelecionar,
